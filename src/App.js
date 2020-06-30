@@ -1,20 +1,21 @@
 import React, {Component} from 'react';
+import {YMaps, Map, Placemark, withYMaps} from "react-yandex-maps";
 import './css/plugins/swiper.css'
 import './css/plugins/jquery.fancybox.min.css'
 import './css/plugins/hamburgers.min.css'
 import './css/normalize.css'
 import './css/main.css'
+import {styles} from "./css/styles";
+// import './css/landing/main.css'
 // import './js/main.js'
 
 import axios from 'axios'
 // import {Header} from "./js/components/Header";
 
-import {HOST, WEB_URL} from './js/consts'
+import {HOST, host_adv, host_repost, host_user, WEB_URL_API} from './js/consts'
 import Header from "./js/components/Header";
+import {postRender} from "./js/main";
 
-const host_user = HOST + "user-profile";
-const host_adv = HOST + "adv";
-const host_repost = HOST + "repost";
 
 // let subDomain = this.props.subDomain
 
@@ -44,7 +45,8 @@ function checkIsExists() {
     var xhr = new XMLHttpRequest();
     // const response = await axios.get('http://localhost:5000/api/v1/adv/get/test-flat');
     // const isExists = response.data
-    xhr.open('GET', 'http://localhost:5000/api/v1/adv/get/test-flat', false)
+    // xhr.open('GET', 'http://localhost:5000/api/v1/adv/get/test-flat', false)
+    xhr.open('GET', HOST + '/adv/get/test-flat', false)
     xhr.send();
     xhr.onload = function () {
         if (xhr.status !== 200) {
@@ -60,6 +62,15 @@ function checkIsExists() {
     }
 }
 
+const mapData = {
+    center: [55.684758, 37.738521],
+    zoom: 15,
+};
+
+const coordinates = [
+    [55.684758, 37.738521]
+];
+
 
 export default class App extends Component {
 // const App = () => {
@@ -72,59 +83,98 @@ export default class App extends Component {
     // useScript('./js/plugins/jquery.fancybox.min.js');
     // useScript('./js/main.js');
     // useScript('./js/main.js');
+
+
     state = {
         isLoading: true,
         content: []
     }
+
+
 
     constructor(props) {
         super(props);
     }
 
     async componentDidMount() {
-        //проверить есть ли в бд такое объявление если есть - выводить, нет - выводим заглавную страницу
-        if (this.props.subDomain != null) {
-            let url = host_adv + '/get/' + this.props.subDomain
-            axios.get(url)
+        if (this.props.subDomain != null || this.props.path != null) {
+            console.log("запрашиваем контент")
+            //запрашиваем контент
+            let addr
+            if (this.props.subDomain) {
+                addr = host_adv + '/getContent/' + this.props.subDomain;
+            } else if (this.props.path) {
+                addr = host_adv + '/getContentByUniqUrl/' + this.props.path;
+            }
+
+            axios.get(addr)
                 .then(res => {
+                    //////////
+                    console.log(res.data)
                     console.log("res")
-                    console.log(res)
+                    this.setState({content: res.data})
                     this.setState({isLoading: false})
                 }).catch(reason => {
                 console.log("Unknown object")
                 // window.location.replace("http://" + WEB_URL)
-            })
-        }
-        else if (this.props.path != null) {
-            //////////
-            let uniqUrl = this.props.path.substring(1)
-            let url = host_repost + '/findByUniqUrl?url=' + uniqUrl
-            this.setState({isLoading: false})
-            // axios.get(url)
-            //     .then(res => {
-            //         //////////
-            //         console.log(res)
-            //         console.log("res")
-            //         this.setState({isLoading: false})
-            //     }).catch(reason => {
-            //     console.log("Unknown object")
-            //     // window.location.replace("http://" + WEB_URL)
-            // })
+            });
+            // window.location.replace("http://" + WEB_URL)
+
+            //проверить есть ли в бд такое объявление если есть - выводить, нет - выводим заглавную страницу
+            if (this.props.subDomain != null) {
+                console.log("this.props.subDomain")
+                console.log(this.props.subDomain)
+                console.log("this.state.content")
+                console.log(this.state.content)
+                let url = host_adv + '/get/' + this.props.subDomain
+                axios.get(url)
+                    .then(res => {
+                        console.log("res")
+                        console.log(res)
+                        // this.setState({isLoading: false})
+                    }).catch(reason => {
+                    console.log("Unknown object")
+                    // window.location.replace("http://" + WEB_URL)
+                })
+            } else if (this.props.path != null) {
+                //////////
+                console.log("this.props.path != null: ")
+                let uniqUrl = this.props.path.substring(1)
+                let url = host_repost + '/findByUniqUrl?url=' + uniqUrl
+                console.log("URL: " + url)
+                // this.setState({isLoading: false})
+                // axios.get(url)
+                //     .then(res => {
+                //         //////////
+                //         console.log(res)
+                //         console.log("res")
+                //         this.setState({isLoading: false})
+                //     }).catch(reason => {
+                //     console.log("Unknown object")
+                //     // window.location.replace("http://" + WEB_URL)
+                // })
+            }
+            // document.addEventListener('DOMContentLoaded', postRender)
+            postRender();
         }
 
     }
-        // scrMap.src = "https://api-maps.yandex.ru/services/constructor/1.0/js/?um=constructor%3A00912d2f65c6debed543efea92fc70f8f0098edd7878071b18d550dc3cc2a784&amp;width=100%25&amp;height=100%&amp;lang=ru_RU&amp;scroll=true";
+
+    // scrMap.src = "https://api-maps.yandex.ru/services/constructor/1.0/js/?um=constructor%3A00912d2f65c6debed543efea92fc70f8f0098edd7878071b18d550dc3cc2a784&amp;width=100%25&amp;height=100%&amp;lang=ru_RU&amp;scroll=true";
     render() {
+        console.log("RENDER---------------")
         if (this.state.isLoading === false) {
             return (
                 <div className="App">
                     {/*-------------------------------------*/}
-                    <Header subDomain={this.props.subDomain} path={this.props.path}/>
+                    <Header
+                        subDomain={this.props.subDomain} path={this.props.path} bonus={this.state.content.bonus}/>
                     <div className="space__head-wrap">
                         <div className="space__head"/>
                     </div>
                     <section className="heading">
-                        <h1 className="heading__title">Продажа квартиры<br/>в историческом районе</h1>
+                        {/*<h1 className="heading__title">Продажа квартиры<br/>в историческом районе</h1>*/}
+                        <h1 className="heading__title">{this.state.content.headTop}</h1>
                     </section>
                     <div className="modal-window" id="modal-window">
                         <div className="modal-window__wrap">
@@ -318,60 +368,27 @@ export default class App extends Component {
                                     </div>
 
                                     <p className="flat-desc__about-human">
-                                        Светлана Горбунова (La Prima Estate)
-                                        <span className="flat-desc__desc-human">брокер объекта</span>
+                                        {this.state.content.brokerInfo.name}
+                                        <span
+                                            className="flat-desc__desc-human">{this.state.content.brokerInfo.comment}</span>
                                     </p>
                                 </div>
 
                                 <div className="flat-desc__main-desc">
                                     <p className="flat-desc__header">
-                                        Квартира с красивым видом
+                                        {this.state.content.descHead}
                                     </p>
 
-                                    <p className="flat-desc__paragraph">
-                                        Великое дело, главный труд жизни.
-                                    </p>
-
-                                    <p className="flat-desc__paragraph">
-                                        Самое значимое и эпохальное творение человека в искусстве, науке или
-                                        любой
-                                        другой
-                                        сфере
-                                        деятельности. Клубный дом Magnum на Усачева, 9 в Хамовниках - это новое
-                                        явление,
-                                        которое,
-                                        несомненно, окажет влияние на сферу московской недвижимости
-                                        премиум-класса,
-                                        новое
-                                        слово
-                                        в
-                                        сегменте.
-                                    </p>
-
-                                    <p className="flat-desc__paragraph">
-                                        Концептуальный и эксклюзивный проект, свободный от условностей. Этот дом
-                                        цепляет
-                                        и
-                                        внешним
-                                        видом.
-                                    </p>
-
-                                    <p className="flat-desc__paragraph">
-                                        Нетипичная для района архитектура, особый характер: темный камень,
-                                        необычная
-                                        фактура,
-                                        металл и
-                                        стекло - брутальное и строгое здание, но с собственной харизмой и
-                                        индивидуальностью.
-                                    </p>
+                                    <span className="flat-desc__paragraph">
+                                        {textFormatter(this.state.content.description)}
+                                    </span>
 
                                 </div>
 
                                 <div className="flat-desc__price">
                                     <p className="flat-desc__price-text">
-                                        105 000 000 руб.
-
-                                        <span className="flat-desc__mortgage">Возможна покупка в ипотеку</span>
+                                        {this.state.content.price}
+                                        <span className="flat-desc__mortgage">{this.state.content.priceComment}</span>
                                     </p>
 
                                     <a href="#modal-window" data-fancybox="modal-window"
@@ -424,6 +441,7 @@ export default class App extends Component {
                             {/*        Подземный паркинг*/}
                             {/*    </div>*/}
                             {/*</li>*/}
+                            {bulletFormatter(this.state.content.bullets)}
                         </ul>
                     </section>
                     {/*        </div>*/}
@@ -431,11 +449,14 @@ export default class App extends Component {
 
                     <section className="location">
                         <div className="section__title">Расположение</div>
-                        <div className="location__map-wrap">
-                            <script type="text/javascript" charSet="utf-8" async
-                                    src="https://api-maps.yandex.ru/services/constructor/1.0/js/?um=constructor%3A00912d2f65c6debed543efea92fc70f8f0098edd7878071b18d550dc3cc2a784&amp;width=100%25&amp;height=100%&amp;lang=ru_RU&amp;scroll=true">
-                            </script>
-                        </div>
+                        {/*<div className="location__map-wrap">*/}
+                            <YMaps  style={styles.YMaps}>
+                                {/*<Map defaultState={mapData} width={"100%"} height={250}>*/}
+                                <Map defaultState={mapData} className="location__map-wrap">
+                                    {coordinates.map(coordinate => <Placemark geometry={coordinate} />)}
+                                </Map>
+                            </YMaps>
+                        {/*</div>*/}
                     </section>
 
                     <footer className="section footer">
@@ -509,7 +530,7 @@ export default class App extends Component {
                                     <a href="#" className="footer__quest">Задать вопрос</a>
 
                                     <a className="footer__link-mail"
-                                       href="mailto:info@site-project.ru">info@site-project.ru</a>
+                                       href="mailto:info@site-project.ru">info@linkme.club</a>
 
                                     <a href="#" className="footer__circs">Условия использования</a>
                                 </div>
@@ -534,7 +555,51 @@ export default class App extends Component {
         } else {
             return null;
         }
+
     }
 }
 
-// export default App;
+
+function textFormatter(text) {
+    console.log("textFormatter")
+    console.log(text)
+    return (
+        <div>
+            {text.split('\\n').map((i, key) => {
+                return <span key={key}>{i} <br/></span>;
+            })}
+        </div>);
+}
+
+function bulletFormatter(text) {
+    console.log("bulletFormatter")
+    console.log(text)
+    return (
+        <div>
+            <li className="about-comp__desc-item-wrap">
+                {text.split('|').map((i, key) => {
+                    console.log(i + ": " + key)
+                    // return <p key={key}>{i}</p>;
+                    return <div key={key} className="about-comp__desc-item">{i}</div>
+
+                })}
+            </li>
+        </div>);
+
+    // <li className="about-comp__desc-item-wrap">
+    //     <div className="about-comp__desc-item">
+    //         2 км от Кремля
+    //     </div>
+    //     <div className="about-comp__desc-item">
+    //         Закрытая территория
+    //     </div>
+    // </li>
+    // <li className="about-comp__desc-item-wrap">
+    //     <div className="about-comp__desc-item">
+    //         Всего 20 квартир
+    //     </div>
+    //     <div className="about-comp__desc-item">
+    //         Подземный паркинг
+    //     </div>
+    // </li>
+}

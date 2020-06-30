@@ -1871,7 +1871,9 @@ html {
 }
 
 .location__map-wrap {
+  position: center;
   height: 474px;
+  margin-left: fill;
 }
 
 @media screen and (max-width: 1200px) {

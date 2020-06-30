@@ -8,11 +8,12 @@ import {Router, Route, Switch} from "react-router-dom";
 import * as serviceWorker from './serviceWorker';
 import LandingPage from "./js/components/LandingPage";
 import VKRedirect from "./js/components/VKRedirect";
+// import LandingPageMain from "./js/components/LandingPageMain";
 
 var hist = createBrowserHistory();
 
 const parsedData = window.location.host.split(".");
-const path = window.location.pathname;
+const path = window.location.pathname.substring(1);
 console.log("parsedData: " + parsedData)
 const domain = parsedData[parsedData.length - 1]
 console.log(domain)

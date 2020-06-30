@@ -1,6 +1,13 @@
-export const HOST = "http://localhost:5000/api/v1/";
-export const WEB_URL = "mydomainname.com";
-export const vk_app_id = "7505819";
-export const vk_secret_key = "JDXQL29WH97pdkrWSx76";
-// export const DR_PEPPER = 'DR_PEPPER';
-// export const PEPSI = 'PEPSI';
+// export const WEB_URL = "linkme.club";
+
+//dev configuration
+// export const WEB_URL_API = "localhost:5000";
+// export const WEB_URL = "mydomainname.com";
+//prod configuration
+export const WEB_URL_API = "linkme.club";
+export const WEB_URL = "linkme.club";
+
+export const HOST = "http://" + WEB_URL_API + "/api/v1/";
+export const host_user = HOST + "user-profile";
+export const host_adv = HOST + "adv";
+export const host_repost = HOST + "repost";

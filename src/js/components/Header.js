@@ -1,11 +1,12 @@
 import React, {Component} from "react";
-import {HOST, WEB_URL} from '../consts'
+import {HOST, WEB_URL, WEB_URL_API} from '../consts'
 
 import '../main.js'
 
 
 import axios from 'axios'
 import Cookies from 'universal-cookie';
+import {postRender} from "../main";
 
 
 const hostUserProfile = HOST + "user-profile";
@@ -28,13 +29,30 @@ async function getUser() {
     }
 }
 
-async function getUserLink(props) {
-    let subDomain = props.subDomain
+export async function getUserLink(subDomain) {
+    //если перешел по короткой ссылке, нужна другая логика
     let userId = cookies.get('vk_userId');
     let url = hostRepost + '/getRepostOrSave' +
         '?socialId=' + userId + '&url=' + subDomain
     console.log("subDomain")
     console.log(subDomain)
+    let res = await axios.get(url)
+    if (res.status === 200) {
+        let repost = res.data;
+        console.log("repost: ")
+        console.log(repost)
+        return repost;
+    }
+}
+
+export async function getUserLinkByUniqUrl(uniqUrl) {
+    //если перешел по короткой ссылке, нужна другая логика
+    console.log("получение по uniqUrl")
+    let userId = cookies.get('vk_userId');
+    let url = hostRepost + '/getRepostOrSaveByUniqUrl' +
+        '?socialId=' + userId + '&uniqUrl=' + uniqUrl
+    console.log("uniqUrl")
+    console.log(url)
     let res = await axios.get(url)
     if (res.status === 200) {
         let repost = res.data;
@@ -54,11 +72,17 @@ function checkStatus() {
         console.log("UNLOGGED")
         isAuth = false;
     }
+    postRender();
     return isAuth;
 }
 
 function authVKAction() {
     cookies.set('startPage', window.location.host,
+        {
+            sameSite: 'none',
+            domain: `.${WEB_URL}`
+        });
+    cookies.set('startUrl', window.location.pathname.substring(1),
         {
             sameSite: 'none',
             domain: `.${WEB_URL}`
@@ -76,10 +100,23 @@ function authVKAction() {
 }
 
 
+function logOut() {
+    console.log("LOGOUT")
+    // cookies.remove('vk_userId', {path: '/'});
+    cookies.remove('vk_userId',
+        {
+            sameSite: 'none',
+            domain: `.${WEB_URL}`
+        });
+    window.location.reload()
+    // this.state.isAuth = false;
+}
+
 export default class Header extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            isAuth: false,
             data: [],
             userLink: []
         }
@@ -93,7 +130,7 @@ export default class Header extends Component {
             this.setState({data: userProfile});
             console.log(this.state)
             if (this.props.path == null) {
-                const res = await getUserLink(this.props);
+                const res = await getUserLink(this.props.subDomain);
                 userLink = res.uniqLink;
             } else {
                 userLink = this.props.path;
@@ -105,9 +142,7 @@ export default class Header extends Component {
                 window.location.replace(address)
             }
         }
-
     }
-
 
     render() {
         if (!isAuth) {
@@ -142,7 +177,7 @@ export default class Header extends Component {
                         <div className="header__wrap-all">
                             <p className="header__desc">Поделись ссылкой и заработай на этом</p>
                             <div className="header__price-wrap">
-                                <p className="header__price">500 000
+                                <p className="header__price">{this.props.bonus}
                                 </p><span className="header__rub">₽</span>
                             </div>
                             <ul className="header__social-list">
@@ -190,7 +225,7 @@ export default class Header extends Component {
                         <div className="header__wrap-all">
                             <div className="header__man-wrap">
                                 {/*<img src={require("../../img/header-man.png")} alt="Аватар" className="header__man-img"/>*/}
-                                <img src={this.state.data.userProfileImageLink} alt="Аватар"
+                                <img src={this.state.data.userProfileImageLink} onClick={logOut} alt="Аватар"
                                      className="header__man-img"/>
                                 <a href="#" className="header__logout">x</a>
                             </div>

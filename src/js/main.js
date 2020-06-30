@@ -6,7 +6,7 @@ import Swiper from 'swiper'
 
 console.log("MAIN JS")
 
-document.addEventListener('DOMContentLoaded', function () {
+export function postRender() {
 // document.addEventListener('load', function () {
     console.log("MAIN JS DOMContentLoaded")
     var mySwiperPhoto = new Swiper('.photo-obj-swiper', {
@@ -205,4 +205,6 @@ document.addEventListener('DOMContentLoaded', function () {
     if (numbInp != null) {
         numbInp.oninput = activeNumbSell
     }
-})
+}
+
+// document.addEventListener('DOMContentLoaded', postRender)
