@@ -1,19 +1,19 @@
-import { useEffect } from 'react';
+// import { useEffect } from 'react';
 
 const useScript = url => {
-    useEffect(() => {
-        const script = document.createElement('script');
-
-        script.src = url;
-        script.type = "text/javascript";
-        script.async = true;
-
-        document.body.appendChild(script);
-
-        return () => {
-            document.body.removeChild(script);
-        }
-    }, [url]);
+    // useEffect(() => {
+    //     const script = document.createElement('script');
+    //
+    //     script.src = url;
+    //     script.type = "text/javascript";
+    //     script.async = true;
+    //
+    //     document.body.appendChild(script);
+    //
+    //     return () => {
+    //         document.body.removeChild(script);
+    //     }
+    // }, [url]);
 };
 
-export default useScript;
+// export default useScript;

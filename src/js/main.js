@@ -49,7 +49,7 @@ export function postRender() {
         let fancyB = document.querySelector('.flat-desc__btn-contact')
         if (fancyB != null) {
             fancyB.addEventListener('click', function () {
-                console.log("!!!!!!!!!!!!!!!");
+                console.log("!!!!!!!!!!!!!!! click связаться");
                 modal.style.display = "block";
             });
         }
@@ -80,8 +80,8 @@ export function postRender() {
         let space = document.querySelector('.space__head')
         let man = document.querySelector('.header__man-wrap')
         let buttonLink = document.querySelector('.about-link__border')
-        let hamburgerUser = document.querySelector('.hamburger-user-js')
-        let hamburgerGuest = document.querySelector('.hamburger-guest-js')
+        // let hamburgerUser = document.querySelector('.hamburger-user-js')
+        // let hamburgerGuest = document.querySelector('.hamburger-guest-js')
         let socialList = document.querySelector('.header__social-list')
         let mainHeader = document.querySelector('.main-header')
 
@@ -102,16 +102,16 @@ export function postRender() {
                 if (window.innerWidth <= 992) {
                     mainHeader.classList.add('active-user')
                     socialList.style.display = 'flex'
-                    hamburgerUser.style.top = `-${guestSecond.scrollHeight}px`
-                    hamburgerUser.classList.add('is-active')
+                    // hamburgerUser.style.top = `-${guestSecond.scrollHeight}px`
+                    // hamburgerUser.classList.add('is-active')
                 }
             }
 
             if (document.querySelector('.header.guest')) {
                 if (window.innerWidth <= 576) {
                     mainHeader.classList.add('active-guest')
-                    hamburgerGuest.style.top = `-${guestSecond.scrollHeight}px`
-                    hamburgerGuest.classList.add('is-active')
+                    // hamburgerGuest.style.top = `-${guestSecond.scrollHeight}px`
+                    // hamburgerGuest.classList.add('is-active')
                 }
             }
         }
@@ -126,15 +126,15 @@ export function postRender() {
                 if (window.innerWidth <= 992) {
                     socialList.style.display = 'none'
                     mainHeader.classList.remove('active-user')
-                    hamburgerUser.style.top = 0 + 'px'
-                    hamburgerUser.classList.remove('is-active')
+                    // hamburgerUser.style.top = 0 + 'px'
+                    // hamburgerUser.classList.remove('is-active')
                 }
             }
             if (document.querySelector('.header.guest')) {
                 if (window.innerWidth <= 576) {
                     mainHeader.classList.remove('active-guest')
-                    hamburgerGuest.style.top = 0 + 'px'
-                    hamburgerGuest.classList.remove('is-active')
+                    // hamburgerGuest.style.top = 0 + 'px'
+                    // hamburgerGuest.classList.remove('is-active')
                 }
             }
         }
@@ -155,14 +155,14 @@ export function postRender() {
             }
         })
         if (document.querySelector('.header.guest')) {
-            hamburgerGuest.addEventListener('click', function () {
-                guestSecond.style.top == '0px' ? menuSlideUp() : menuSlideDown()
-            })
+            // hamburgerGuest.addEventListener('click', function () {
+            //     guestSecond.style.top == '0px' ? menuSlideUp() : menuSlideDown()
+            // })
         }
         if (document.querySelector('.header.user')) {
-            hamburgerUser.addEventListener('click', function () {
-                guestSecond.style.top == '0px' ? menuSlideUp() : menuSlideDown()
-            })
+            // hamburgerUser.addEventListener('click', function () {
+            //     guestSecond.style.top == '0px' ? menuSlideUp() : menuSlideDown()
+            // })
 
             var copysiteBtn = document.querySelector('.user-hover__copy')
             copysiteBtn.addEventListener('click', function (event) {

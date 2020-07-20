@@ -427,7 +427,7 @@ html {
 @media screen and (max-width: 992px) {
   .header__man-wrap {
     position: absolute;
-    top: -150px;
+    top: -100px;
     left: 15px;
     z-index: 5;
   }
@@ -435,7 +435,7 @@ html {
 
 @media screen and (max-width: 556px) {
   .header__man-wrap {
-    top: -150px;
+    /*top: -150px;*/
   }
 }
 
@@ -847,7 +847,7 @@ html {
 @media screen and (max-width: 576px) {
   .user .header__site-link {
     margin-left: 0;
-    font-size: 18px;
+    font-size: 16px;
   }
   .user .header__site-link::after {
     margin-left: 5%;
@@ -880,7 +880,7 @@ html {
   .user .header__desc {
     max-width: 100%;
     margin-right: 0;
-    font-size: 18px;
+    font-size: 16px;
   }
 }
 
@@ -988,7 +988,7 @@ html {
 @media screen and (max-width: 992px) {
   .user .header__social-list {
     margin-left: 15%;
-    display: none;
+    display: flex;
   }
 }
 
@@ -1041,7 +1041,7 @@ html {
 
 @media screen and (max-width: 576px) {
   .user__header-wrap-need {
-    width: 40%;
+    width: 100%;
   }
 }
 
@@ -1230,7 +1230,8 @@ html {
 .heading {
   width: 100%;
   height: 408px;
-  background-image: url(../img/header.jpg);
+  /*background-image: url(../img/header.jpg);*/
+  /*background-image: url(https://images-na.ssl-images-amazon.com/images/I/91uWDFr0ekL._SX450_.jpg);*/
   background-repeat: no-repeat;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -1816,12 +1817,14 @@ html {
 }
 
 .about-comp__desc-item-wrap {
+  margin-left: auto;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
   -ms-flex-pack: distribute;
       justify-content: space-around;
-  width: 50%;
+  width: 170%;
+  position: center;
 }
 
 @media screen and (max-width: 992px) {
@@ -2154,6 +2157,7 @@ html {
 }
 
 .modal-window__wrap {
+  alignment: center;
   border: 1px solid #dedede;
   padding: 75px 20px 45px 20px;
 }

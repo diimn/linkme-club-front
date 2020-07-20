@@ -149,7 +149,7 @@ export default class LandingPage extends Component {
                                     <p className="how-iw__bonus-text how-iw__desc">Благодарность в виде денежной
                                         выплаты
                                         за помошь в организации сделки или
-                                        занкомсва продавца с покупателем -
+                                        знакомсва продавца с покупателем -
                                         присутствует в любом виде бизнеса.
                                     </p>
                                     <p className="how-iw__bonus-text how-iw__desc">Linkme.club - сервис, который
@@ -178,7 +178,7 @@ export default class LandingPage extends Component {
                                     например друзьям и знакомым
                                 </p>
                                 <p className="how-iw__desc">Каждый посетитель объявления фиксируется
-                                    системой и закрепляется за темпользователем,
+                                    системой и закрепляется за тем пользователем,
                                     по чьей ссылке пришел посетитель
                                 </p>
                             </div>

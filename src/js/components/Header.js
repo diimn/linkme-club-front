@@ -1,5 +1,6 @@
 import React, {Component} from "react";
 import {HOST, WEB_URL, WEB_URL_API} from '../consts'
+import {VK} from "react-vk"
 
 import '../main.js'
 
@@ -9,8 +10,8 @@ import Cookies from 'universal-cookie';
 import {postRender} from "../main";
 
 
-const hostUserProfile = HOST + "user-profile";
-const hostRepost = HOST + "repost";
+const hostUserProfile = HOST + "/user-profile";
+const hostRepost = HOST + "/repost";
 // let subDomain = this.props.subDomain;
 let isAuth = false;
 const cookies = new Cookies();
@@ -76,27 +77,50 @@ function checkStatus() {
     return isAuth;
 }
 
-function authVKAction() {
-    cookies.set('startPage', window.location.host,
-        {
-            sameSite: 'none',
-            domain: `.${WEB_URL}`
-        });
-    cookies.set('startUrl', window.location.pathname.substring(1),
-        {
-            sameSite: 'none',
-            domain: `.${WEB_URL}`
-        });
-    let address = "https://oauth.vk.com/authorize" +
-        "?client_id=7505819&" +
-        "display=page" +
-        "&" +
-        `redirect_uri=http://${WEB_URL}/vkredirect` +
-        "&" +
-        "scope=wall" +
-        "&response_type=code&v=5.110"
-    console.log("authVKAction 1 " + isAuth)
-    window.location.replace(address)
+function authVKAction(data) {
+    if (!isAuth) {
+        cookies.set('startPage', window.location.host,
+            {
+                sameSite: 'none',
+                domain: `.${WEB_URL}`
+            });
+        cookies.set('startUrl', window.location.pathname.substring(1),
+            {
+                sameSite: 'none',
+                domain: `.${WEB_URL}`
+            });
+        let address = "https://oauth.vk.com/authorize" +
+            "?client_id=7505819&" +
+            "display=page" +
+            "&" +
+            `redirect_uri=http://${WEB_URL}/vkredirect` +
+            "&" +
+            "scope=wall" +
+            "&response_type=code&v=5.110"
+        console.log("authVKAction 1 " + isAuth)
+        window.location.replace(address)
+    } else {
+        //сделать репост
+        console.log("VK_REPOST");
+
+        console.log("VK_REPOST:" + data);
+
+        let link = "http://linkme.club" + window.location.pathname
+        // let img_link = "http://linkme.club" + window.location.pathname
+        // "http://mydomainname.com/static/media/f-slider-1.db4ba8c6.jpg"
+
+        let addr = "https://vk.com/share.php" +
+            "?url=" +
+            // window.location.href +
+            link +
+            "&title=" +
+            data
+        // "&image=" +
+        // img_link
+        window.open(addr)
+        // .then(window.location = '/')
+    }
+
 }
 
 
@@ -110,6 +134,10 @@ function logOut() {
         });
     window.location.reload()
     // this.state.isAuth = false;
+}
+
+function cutHttp(str) {
+    return String(str).substr('http://'.length)
 }
 
 export default class Header extends Component {
@@ -183,23 +211,23 @@ export default class Header extends Component {
                             <ul className="header__social-list">
                                 <li className="header__social-item">
                                     <a href="#" className="header__social-link">
-                                        <img src={require("../../img/header-vk.png")} alt="Вк"
+                                        <img src={require("../../img/vk-color.png")} alt="Вк"
                                              className="header__social-img" onClick={authVKAction}
                                         /></a>
                                 </li>
                                 <li className="header__social-item">
                                     <a href="#" className="header__social-link">
-                                        <img src={require("../../img/header-facebook.png")}
+                                        <img src={require("../../img/fb-color.png")}
                                              alt="Фейсбук"
                                              className="header__social-img"/></a>
                                 </li>
                             </ul>
                             <a href="#" className="header__more">Узнать больше</a>
-                            <button className="hamburger hamburger-guest-js hamburger--minus" type="button">
-                                <span className="hamburger-box">
-                                    <span className="hamburger-inner"/>
-                                </span>
-                            </button>
+                            {/*<button className="hamburger hamburger-guest-js hamburger--minus" type="button">*/}
+                            {/*    <span className="hamburger-box">*/}
+                            {/*        <span className="hamburger-inner"/>*/}
+                            {/*    </span>*/}
+                            {/*</button>*/}
                         </div>
                     </div>
                 </header>
@@ -233,31 +261,32 @@ export default class Header extends Component {
                                 <p className="header__desc">Заработай на этом</p>
                                 <div className="header__price-wrap">
                                     {/*<p className="header__price">{this.state.data.bonus}</p><span*/}
-                                    <p className="header__price">500000</p><span
+                                    <p className="header__price">{this.props.bonus}</p><span
                                     className="header__rub">₽</span>
                                 </div>
                             </div>
                             <div className="user__header-wrap-need">
-                                <a href="#" className="header__site-link">{this.state.userLink}</a>
+                                <a href="#" className="header__site-link">{cutHttp(this.state.userLink)}</a>
                                 <ul className="header__social-list">
                                     <li className="header__social-item">
                                         <a href="#" className="header__social-link">
-                                            <img src={require("../../img/header-vk.png")} alt="Вк"
-                                                 className="header__social-img" onClick={authVKAction}/>
+                                            <img src={require("../../img/vk-color.png")} alt="Вк"
+                                                 className="header__social-img"
+                                                 onClick={() => authVKAction(this.props.title)}/>
                                         </a>
                                     </li>
-                                    <li className="header__social-item">
-                                        <a href="#" className="header__social-link">
-                                            <img src={require("../../img/header-facebook.png")} alt="Фейсбук"
-                                                 className="header__social-img"/>
-                                        </a>
-                                    </li>
+                                    {/*<li className="header__social-item">*/}
+                                    {/*    <a href="#" className="header__social-link">*/}
+                                    {/*        <img src={require("../../img/header-facebook.png")} alt="Фейсбук"*/}
+                                    {/*             className="header__social-img"/>*/}
+                                    {/*    </a>*/}
+                                    {/*</li>*/}
                                 </ul>
-                                <button className="hamburger hamburger-user-js hamburger--minus" type="button">
-<span className="hamburger-box">
-<span className="hamburger-inner"></span>
-</span>
-                                </button>
+{/*                                <button className="hamburger hamburger-user-js hamburger--minus" type="button">*/}
+{/*<span className="hamburger-box">*/}
+{/*<span className="hamburger-inner"></span>*/}
+{/*</span>*/}
+{/*                                </button>*/}
                             </div>
                             <a href="#" className="header__more">Узнать больше</a>
                         </div>

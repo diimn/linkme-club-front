@@ -22,7 +22,7 @@ export default class VKRedirect extends Component {
             });
 
         //делаем запрос к вк для получения id клиента и access token
-        let vkApiAddress = HOST + "vk/auth" + `?code=${code}`
+        let vkApiAddress = HOST + "/vk/auth" + `?code=${code}`
         console.log(vkApiAddress)
         let res = await axios.get(vkApiAddress)
         if (res.status === 200) {
