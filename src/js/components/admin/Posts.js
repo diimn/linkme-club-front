@@ -13,13 +13,16 @@ import {
     TextInput,
     DateInput,
     ImageInput,
-    ImageField
+    ImageField,
+    CardActions,
+    ShowButton
 } from 'react-admin';
 import BookIcon from '@material-ui/icons/Book';
 import axios from "axios"
 import {useDropzone} from 'react-dropzone'
-import {HOST} from "../../consts";
+import {HOST, host_images} from "../../consts";
 import {Toolbar} from "material-ui";
+import Button from "@material-ui/core/Button";
 
 export const AdvIcon = BookIcon;
 
@@ -40,30 +43,38 @@ const AdvTitle = ({record}) => {
     return <span>Adv {record ? `"${record.title}"` : ''}</span>;
 };
 
+
+
 export const AdvEdit = (props) => (
-    <Edit title={<AdvTitle/>} {...props}>
-        <SimpleForm>
-            <TextInput disabled source="id"/>
-            <TextInput source="title"/>
-            <TextInput source="title"/>
-            <TextInput source="title"/>
-            <TextInput source="title"/>
-            <TextInput source="title"/>
-            <TextInput source="title"/>
-            <TextInput source="teaser" options={{multiLine: true}}/>
-            <TextInput multiline source="body"/>
-            <DateInput label="Publication date" source="published_at"/>
-            <TextInput source="average_note"/>
-            <TextInput disabled label="Nb views" source="views"/>
-        </SimpleForm>
+    <Edit undoable={false}  title={<AdvTitle/>}  actions={<PostEditActions/>} {...props}>
+        {redactor()}
     </Edit>
 );
 
+
 export const AdvCreate = (props) => (
     <Create title="Create a Post" {...props}>
+        {redactor()}
+    </Create>
+);
+
+const PostEditActions = ({basePath, data, resource}) => (
+    <CardActions>
+        {/*<ShowButton basePath={basePath} record={data}/>*/}
+        {/* Add your custom actions */}
+        <Button color="primary" onClick={customAction}>Custom Action</Button>
+    </CardActions>
+);
+
+function customAction() {
+    console.log("ACTION")
+}
+
+function redactor() {
+    return (
         <SimpleForm>
             <ImageInput source="headPhoto" label="Загрузка изображений для шапки" accept="image/*"
-                        labelSingle = "Перетащите фотографию или выберите для загрузки">
+                        labelSingle="Перетащите фотографию или выберите для загрузки">
                 <ImageField source="src" title="title"/>
             </ImageInput>
             <TextInput source="url" label="URL" helperText=""/>
@@ -74,7 +85,7 @@ export const AdvCreate = (props) => (
             {/*<Dropzone title="Загрузка изображений слайдера 1" slider_id="1"/>*/}
             <ImageInput source="slider1" label="Загрузка изображений слайдера 1" accept="image/*"
                         multiple="true"
-                        labelMultiple = "Перетащите фотографии или выберите для загрузки">
+                        labelMultiple="Перетащите фотографии или выберите для загрузки">
                 <ImageField source="src" title="title"/>
             </ImageInput>
             <TextInput source="advContent.price_comment" label="Комментарий к цене"/>
@@ -82,12 +93,12 @@ export const AdvCreate = (props) => (
             <TextInput multiline source="advContent.description" label="Описание "/>
             <ImageInput source="slider2" label="Загрузка изображений слайдера 2" accept="image/*"
                         multiple="true"
-                        labelMultiple = "Перетащите фотографии или выберите для загрузки">
+                        labelMultiple="Перетащите фотографии или выберите для загрузки">
                 <ImageField source="src" title="title"/>
             </ImageInput>
             <TextInput source="advContent.bullets" label="Буллеты"/>
             <ImageInput source="brokerPhoto" label="Загрузка фото брокера" accept="image/*"
-                        labelSingle = "Перетащите фотографию или выберите для загрузки">
+                        labelSingle="Перетащите фотографию или выберите для загрузки">
                 <ImageField source="src" title="title"/>
             </ImageInput>
             <TextInput source="advContent.brokerName" label="Имя брокера"/>
@@ -101,44 +112,5 @@ export const AdvCreate = (props) => (
             {/*<TextInput label="Publication date" source="published_at" />*/}
             {/*<TextInput source="average_note" />*/}
         </SimpleForm>
-    </Create>
-);
-
-function Dropzone(props) {
-    const onDrop = useCallback(acceptedFiles => {
-        const file = acceptedFiles[0];
-        console.log(file)
-        const formData = new FormData();
-        formData.append("file", file);
-        axios.post(
-            // host + `/${userProfileId}/image/upload`,
-            HOST + `/image/upload/${props.slider_id}`,
-            formData,
-            {
-                headers: {
-                    "Content-Type": "multipart/form-data"
-                }
-            }
-        ).then(() => {
-            console.log("Image uploaded successfully");
-        }).catch(err => {
-            console.log(err)
-        });
-    }, [])
-    const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
-
-    return (
-        <div {...getRootProps()}>
-            <input {...getInputProps()} />
-            {/*<p>Загрузка изображений карусели</p>*/}
-            <p>{props.title}</p>
-            <p>--------------------</p>
-            {
-                isDragActive ?
-                    <p>Drop the image here ...</p> :
-                    <p>Перетащите картинки для загрузки</p>
-            }
-            <p>--------------------</p>
-        </div>
     )
 }

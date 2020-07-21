@@ -24,6 +24,7 @@ import {
  * DELETE       => DELETE http://my.api.url/posts/123
  */
 export default (apiUrl, httpClient = fetchUtils.fetchJson) => {
+    console.log("test")
     /**
      * @param {String} type One of the constants appearing at the top if this file, e.g. 'UPDATE'
      * @param {String} resource Name of the resource to fetch, e.g. 'posts'
@@ -43,9 +44,10 @@ export default (apiUrl, httpClient = fetchUtils.fetchJson) => {
                 // url = `${apiUrl}/${resource}/getAll`;
                 break;
             }
-            case GET_ONE:
-                url = `${apiUrl}/${resource}/getById/${params.id}`;
+            case GET_ONE: {
+                url = `${apiUrl}/${resource}/${params.id}`;
                 break;
+            }
             case GET_MANY: {
                 const query = {
                     filter: JSON.stringify({id: params.ids})
@@ -60,12 +62,18 @@ export default (apiUrl, httpClient = fetchUtils.fetchJson) => {
                 url = `${apiUrl}/${resource}?page=${page}&pageSize=${perPage}`;
                 break;
             }
-            case UPDATE:
+            case UPDATE: {
                 url = `${apiUrl}/${resource}/${params.id}`;
                 options.method = "PUT";
-                options.body = JSON.stringify(params.data);
+                // options.method = "POST";
+                console.log("UPDATE")
+                let data = await createDataWithImages(params);
+                console.log(data)
+                options.body = JSON.stringify(data);
+
                 break;
-            case CREATE:
+            }
+            case CREATE: {
                 url = `${apiUrl}/${resource}/create`;
                 options.method = "POST";
                 console.log(params.data)
@@ -76,6 +84,7 @@ export default (apiUrl, httpClient = fetchUtils.fetchJson) => {
                 let headPhotoBlob;
                 let slider1BlobList;
                 let slider2BlobList;
+                let brokerPhotoBlob;
                 if (params.data.headPhoto) {
                     headPhotoBlob = await urlSrcToBase64(params.data.headPhoto.src)
                 }
@@ -85,22 +94,29 @@ export default (apiUrl, httpClient = fetchUtils.fetchJson) => {
                 if (params.data.slider2) {
                     slider2BlobList = await Promise.all(urlListToBase64List(params.data.slider2))
                 }
+                if (params.data.brokerPhoto) {
+                    brokerPhotoBlob = await urlSrcToBase64(params.data.brokerPhoto.src)
+                }
 
                 let data = {
                     url: params.data.url,
                     headPhoto: headPhotoBlob,
                     slider1: slider1BlobList,
                     slider2: slider2BlobList,
+                    brokerPhoto: brokerPhotoBlob,
                     advContent: params.data.advContent
                 }
                 console.log(data)
 
                 options.body = JSON.stringify(data);
                 break;
-            case DELETE:
+            }
+            case DELETE: {
                 url = `${apiUrl}/${resource}/${params.id}`;
                 options.method = "DELETE";
                 break;
+            }
+
             default:
                 throw new Error(`Unsupported fetch action type ${type}`);
         }
@@ -108,10 +124,41 @@ export default (apiUrl, httpClient = fetchUtils.fetchJson) => {
     };
 
     const urlListToBase64List = urlList => {
-        return urlList.map(async function (url, index) {
-            return {index: index, content: await urlSrcToBase64(url.src)}
-            // return urlSrcToBase64(url.src)
-        })
+        if (urlList)
+            return urlList.map(async function (url, index) {
+                return {index: index, content: await urlSrcToBase64(url.src)}
+                // return urlSrcToBase64(url.src)
+            })
+    }
+
+    const createDataWithImages = async (params) => {
+        console.log("qwe")
+        let headPhotoBlob;
+        let slider1BlobList;
+        let slider2BlobList;
+        let brokerPhotoBlob;
+        if (params.data.headPhoto) {
+            headPhotoBlob = await urlSrcToBase64(params.data.headPhoto.src)
+        }
+        if (params.data.slider1) {
+            slider1BlobList = await Promise.all(urlListToBase64List(params.data.slider1))
+        }
+        if (params.data.slider2) {
+            slider2BlobList = await Promise.all(urlListToBase64List(params.data.slider2))
+        }
+        if (params.data.brokerPhoto) {
+            brokerPhotoBlob = await urlSrcToBase64(params.data.brokerPhoto.src)
+        }
+
+        let data = {
+            url: params.data.url,
+            headPhoto: headPhotoBlob,
+            slider1: slider1BlobList,
+            slider2: slider2BlobList,
+            brokerPhoto: brokerPhotoBlob,
+            advContent: params.data.advContent
+        }
+        return data;
     }
 
 

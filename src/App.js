@@ -253,9 +253,9 @@ export default class App extends Component {
                                              className="flat-desc__img"/>
                                     </div>
                                     <p className="flat-desc__about-human">
-                                        {this.state.content.brokerInfo ? this.state.content.brokerInfo.name : ""}
+                                        {this.state.content.brokerName}
                                         <span className="flat-desc__desc-human">
-                                            {this.state.content.brokerInfo ? this.state.content.brokerInfo.comment : ""}
+                                            {this.state.content.brokerComment}
                                         </span>
                                     </p>
                                 </div>

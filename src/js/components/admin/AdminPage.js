@@ -8,7 +8,6 @@ import dataProvider from './CustomDataProvider'
 
 export default function AdminPage() {
 
-
     return (
         <Admin dataProvider={dataProvider(HOST)}>
             <Resource name="adv" list={AdvList} edit={AdvEdit} create={AdvCreate} icon={AdvIcon}/>
