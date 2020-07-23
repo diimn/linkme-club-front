@@ -10,4 +10,5 @@ export const host_user = HOST + "/user-profile";
 export const host_adv = HOST + "/adv";
 export const host_repost = HOST + "/repost";
 export const host_images = host_adv + "/image";
+export const host_manager = HOST + "/manager";
 

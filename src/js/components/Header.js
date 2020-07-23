@@ -2,6 +2,8 @@ import React, {Component} from "react";
 import {HOST, WEB_URL, WEB_URL_API} from '../consts'
 import {VK} from "react-vk"
 
+import {CopyToClipboard} from 'react-copy-to-clipboard';
+
 import '../main.js'
 
 
@@ -266,7 +268,9 @@ export default class Header extends Component {
                                 </div>
                             </div>
                             <div className="user__header-wrap-need">
-                                <a href="#" className="header__site-link">{cutHttp(this.state.userLink)}</a>
+                                <CopyToClipboard text={this.state.userLink}>
+                                    <a href="#" className="header__site-link">{cutHttp(this.state.userLink)}</a>
+                                </CopyToClipboard>
                                 <ul className="header__social-list">
                                     <li className="header__social-item">
                                         <a href="#" className="header__social-link">
@@ -282,11 +286,11 @@ export default class Header extends Component {
                                     {/*    </a>*/}
                                     {/*</li>*/}
                                 </ul>
-{/*                                <button className="hamburger hamburger-user-js hamburger--minus" type="button">*/}
-{/*<span className="hamburger-box">*/}
-{/*<span className="hamburger-inner"></span>*/}
-{/*</span>*/}
-{/*                                </button>*/}
+                                {/*                                <button className="hamburger hamburger-user-js hamburger--minus" type="button">*/}
+                                {/*<span className="hamburger-box">*/}
+                                {/*<span className="hamburger-inner"></span>*/}
+                                {/*</span>*/}
+                                {/*                                </button>*/}
                             </div>
                             <a href="#" className="header__more">Узнать больше</a>
                         </div>

@@ -8,7 +8,7 @@ import {Router, Route, Switch} from "react-router-dom";
 import * as serviceWorker from './serviceWorker';
 import LandingPage from "./js/components/LandingPage";
 import VKRedirect from "./js/components/VKRedirect";
-import Login from "./js/components/login/Login";
+// import Login from "./js/components/login/Login";
 import ManagerPage from "./js/components/ManagerPage";
 import AdminPage from "./js/components/admin/AdminPage";
 // import LandingPageMain from "./js/components/LandingPageMain";
@@ -43,7 +43,7 @@ if (parsedData.length >= 3) {
     ReactDOM.render(
         <Router history={hist}>
             <Switch>
-                <Route path="/login" component={Login}/>
+                {/*<Route path="/login" component={Login}/>*/}
                 <Route path="/managerPage" component={ManagerPage}/>
                 <Route path="/adminPage" component={AdminPage}/>
                 {/*<Route path="/profile-page" component={ProfilePage} />*/}

@@ -54,6 +54,7 @@
     ]
   },
   "devDependencies": {
+    "react-copy-to-clipboard": "^5.0.2",
     "react-fancybox": "^0.2.5",
     "universal-cookie": "^4.0.3"
   }

@@ -1,4 +1,5 @@
-import React, {Component} from 'react';
+import React, {Component, useRef} from 'react';
+import ReactDOM from 'react-dom';
 import {YMaps, Map, Placemark, withYMaps} from "react-yandex-maps";
 import './css/plugins/swiper.css'
 import './css/plugins/jquery.fancybox.min.css'
@@ -32,13 +33,9 @@ function checkAdv(props) {
     return false;
 }
 
-const mapData = {
-    center: [55.751226, 37.618549],
-    zoom: 15,
-};
-
 
 export default class App extends Component {
+
 
     state = {
         isLoading: true,
@@ -51,7 +48,48 @@ export default class App extends Component {
 
     constructor(props) {
         super(props);
+
+        this.photosRef = React.createRef()
+        this.descRef = React.createRef()
+        this.aboutRef = React.createRef()
+        this.coordinatesRef = React.createRef()
+
+        this.focusToPhotosElement = this.focusToPhotosElement.bind(this);
+        this.focusToAboutElement = this.focusToAboutElement.bind(this);
+        this.focusToDescElement = this.focusToDescElement.bind(this);
+        this.focusToCoordinatesElement = this.focusToCoordinatesElement.bind(this);
+
     }
+
+    focusToAboutElement() {
+        window.scrollTo({
+            top: this.aboutRef.current.offsetTop - 100,
+            behavior: "smooth"
+        })
+    }
+
+    focusToDescElement() {
+        window.scrollTo({
+            top: this.descRef.current.offsetTop - 100,
+            behavior: "smooth"
+        })
+    }
+
+    focusToPhotosElement() {
+        window.scrollTo({
+            top: this.photosRef.current.offsetTop - 100,
+            behavior: "smooth"
+        })
+    }
+
+
+    focusToCoordinatesElement() {
+        window.scrollTo({
+            top: this.coordinatesRef.current.offsetTop - 100,
+            behavior: "smooth"
+        })
+    }
+
 
     async componentDidMount() {
         if (this.props.subDomain != null || this.props.path != null) {
@@ -112,7 +150,6 @@ export default class App extends Component {
 
     }
 
-
     render() {
         console.log("RENDER---------------")
         if (this.state.isLoading === false) {
@@ -134,7 +171,7 @@ export default class App extends Component {
                              }}>
                         <h1 className="heading__title">{this.state.content.headTop}</h1>
                     </section>
-
+                    {/*Выпилить в отельный компонент*/}
                     <div className="modal-window" id="modal-window">
                         <div className="modal-window__wrap">
                             <form className="modal-window__form">
@@ -188,20 +225,22 @@ export default class App extends Component {
                             </form>
                         </div>
                     </div>
+                    {/*Выпилить в отельный компонент*/}
 
                     <section className="section about-link">
                         <ul className="about-link__list">
                             <li className="about-link__item">
-                                <a href="#" className="about-link__link">Фото объекта</a>
+                                <a href="#" onClick={this.focusToPhotosElement} className="about-link__link">Фото объекта</a>
                             </li>
                             <li className="about-link__item">
-                                <a href="#" className="about-link__link">Описание</a>
+                                <a href="#" onClick={this.focusToDescElement} className="about-link__link">Описание</a>
                             </li>
                             <li className="about-link__item">
-                                <a href="#" className="about-link__link">О комплексе</a>
+                                <a href="#" onClick={this.focusToAboutElement} className="about-link__link">О комплексе</a>
                             </li>
                             <li className="about-link__item">
-                                <a href="#" className="about-link__link">Местоположение</a>
+                                <a href="#" onClick={this.focusToCoordinatesElement}
+                                   className="about-link__link">Местоположение</a>
                             </li>
                             <li className="about-link__item about-link__border">
                                 <a className="about-link__link">Заработай на продаже объекта</a>
@@ -210,8 +249,7 @@ export default class App extends Component {
                     </section>
 
                     <section className="photo-obj">
-                        <h2 className="section__title">Фото</h2>
-
+                        <h2 ref={this.photosRef} className="section__title">Фото</h2>
                         <div className="swiper-container photo-obj-swiper">
                             {sliderTop(this.state.numbersSlider.slider1Count, this.state.url)}
                             {/*<div className="swiper-wrapper">*/}
@@ -244,12 +282,13 @@ export default class App extends Component {
                         </div>
                     </section>
                     <section className="flat-desc">
-                        <div className="section">
+                        <div ref={this.descRef} className="section">
                             <div className="flat-desc__wrap-all">
                                 <div className="flat-desc__img-human">
                                     <div className="flat-desc__img-wrap">
                                         {/*<img src={require('./img/human.jpg')} alt="Картинка продавца"*/}
-                                        <img src={host_images + `/downloadBrokerPhoto?url=${this.state.url}`} alt="Картинка продавца"
+                                        <img src={host_images + `/downloadBrokerPhoto?url=${this.state.url}`}
+                                             alt="Картинка продавца"
                                              className="flat-desc__img"/>
                                     </div>
                                     <p className="flat-desc__about-human">
@@ -278,7 +317,7 @@ export default class App extends Component {
                             </div>
                         </div>
                     </section>
-                    <section className="about-comp">
+                    <section ref={this.aboutRef} className="about-comp">
                         <h2 className="section__title">О комплексе</h2>
                         <div className="swiper-container about-comp-swiper">
                             {slider(this.state.numbersSlider.slider2Count, this.state.url)}
@@ -290,7 +329,7 @@ export default class App extends Component {
                         </ul>
                     </section>
                     <section className="location">
-                        <div className="section__title">Расположение</div>
+                        <div ref={this.coordinatesRef} className="section__title">Расположение</div>
                         <YMaps style={styles.YMaps}>
                             <Map defaultState={this.state.mapData} className="location__map-wrap">
                                 {this.state.coordinates.map(coordinate => <Placemark geometry={coordinate}/>)}
@@ -370,29 +409,41 @@ export default class App extends Component {
 function textFormatter(text) {
     console.log("textFormatter")
     console.log(text)
-    return (
-        <div>
-            {text.split('\\n').map((i, key) => {
-                return <span key={key}>{i} <br/></span>;
-            })}
-        </div>);
+    if (text) {
+        return (
+            <div>
+                {text.split('\\n').map((i, key) => {
+                    return <span key={key}>{i} <br/></span>;
+                })}
+            </div>);
+    } else {
+        return (
+            <div>""</div>
+        )
+    }
 }
 
 
 function bulletFormatter(text) {
     console.log("bulletFormatter")
     console.log(text)
-    return (
-        <div>
-            <li className="about-comp__desc-item-wrap">
-                {text.split('|').map((i, key) => {
-                    console.log(i + ": " + key)
-                    // return <p key={key}>{i}</p>;
-                    return <div key={key} className="about-comp__desc-item">{i}</div>
+    if (text) {
+        return (
+            <div>
+                <li className="about-comp__desc-item-wrap">
+                    {text.split('|').map((i, key) => {
+                        console.log(i + ": " + key)
+                        // return <p key={key}>{i}</p>;
+                        return <div key={key} className="about-comp__desc-item">{i}</div>
 
-                })}
-            </li>
-        </div>);
+                    })}
+                </li>
+            </div>);
+    } else {
+        return (
+            <div>""</div>
+        )
+    }
 }
 
 function slider(count, url) {

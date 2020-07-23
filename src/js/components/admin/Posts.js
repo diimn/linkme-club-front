@@ -1,6 +1,4 @@
-// in posts.js
-// import * as React from "react";
-import React, {useState, useEffect, useCallback} from 'react';
+import React from 'react';
 import {
     List,
     Datagrid,
@@ -11,18 +9,13 @@ import {
     TextField,
     EditButton,
     TextInput,
-    DateInput,
     ImageInput,
     ImageField,
-    CardActions,
-    ShowButton
+    useRedirect,
+    useNotify,
 } from 'react-admin';
 import BookIcon from '@material-ui/icons/Book';
-import axios from "axios"
-import {useDropzone} from 'react-dropzone'
-import {HOST, host_images} from "../../consts";
-import {Toolbar} from "material-ui";
-import Button from "@material-ui/core/Button";
+
 
 export const AdvIcon = BookIcon;
 
@@ -32,8 +25,6 @@ export const AdvList = (props) => (
             <TextField source="id"/>
             <TextField source="url"/>
             <DateField source="creatingDate"/>
-            {/*<TextField source="average_note" />*/}
-            {/*<TextField source="views" />*/}
             <EditButton basePath="/adv"/>
         </Datagrid>
     </List>
@@ -44,31 +35,30 @@ const AdvTitle = ({record}) => {
 };
 
 
+export const AdvEdit = (props) => {
 
-export const AdvEdit = (props) => (
-    <Edit undoable={false}  title={<AdvTitle/>}  actions={<PostEditActions/>} {...props}>
-        {redactor()}
-    </Edit>
-);
-
-
-export const AdvCreate = (props) => (
-    <Create title="Create a Post" {...props}>
-        {redactor()}
-    </Create>
-);
-
-const PostEditActions = ({basePath, data, resource}) => (
-    <CardActions>
-        {/*<ShowButton basePath={basePath} record={data}/>*/}
-        {/* Add your custom actions */}
-        <Button color="primary" onClick={customAction}>Custom Action</Button>
-    </CardActions>
-);
-
-function customAction() {
-    console.log("ACTION")
+    return (
+        <Edit undoable={false} title={<AdvTitle/>} {...props}>
+            {redactor()}
+        </Edit>
+    );
 }
+
+
+export const AdvCreate = (props) => {
+    const notify = useNotify();
+    const redirect = useRedirect();
+    const onSuccess = ({data}) => {
+        notify(`Объявление сохранено`)
+        redirect('/');
+    };
+    return (
+        <Create onSuccess={onSuccess} title="Create a Post" {...props}>
+            {redactor()}
+        </Create>
+    );
+}
+
 
 function redactor() {
     return (
