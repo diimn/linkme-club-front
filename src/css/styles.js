@@ -6,6 +6,6 @@ export const YMaps = {
     boxSizing: "border-box"
 }
 
-export const styles = {
+export const styles1 = {
     YMaps: YMaps
 }

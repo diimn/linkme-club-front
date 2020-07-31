@@ -1,19 +1,62 @@
 import React, {Component, useRef} from 'react';
-import ReactDOM from 'react-dom';
+
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import CloseIcon from '@material-ui/icons/Close';
+import MuiAlert from '@material-ui/lab/Alert';
+
+import InputMask from "react-input-mask";
+import PropTypes from 'prop-types';
+
 import {YMaps, Map, Placemark, withYMaps} from "react-yandex-maps";
 import './css/plugins/swiper.css'
 import './css/plugins/jquery.fancybox.min.css'
 import './css/plugins/hamburgers.min.css'
 import './css/normalize.css'
 import './css/main.css'
-import {styles} from "./css/styles";
+import {styles1} from "./css/styles";
 
 import axios from 'axios'
 
 
-import {host_adv, host_images, host_repost, host_user, WEB_URL_API} from './js/consts'
+import {host_adv, host_clientResponse, host_images, host_repost, host_user, WEB_URL_API} from './js/consts'
 import Header from "./js/components/Header";
 import {postRender} from "./js/main";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Checkbox from "@material-ui/core/Checkbox";
+import {withStyles} from "@material-ui/styles";
+import IconButton from "@material-ui/core/IconButton";
+import Snackbar from "@material-ui/core/Snackbar";
+
+const styles = theme => ({
+    root: {
+        background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
+        border: 0,
+        borderRadius: 3,
+        boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
+        color: 'white',
+        height: 48,
+        padding: '0 30px',
+    },
+    closeButton: {
+        position: 'absolute',
+        right: 0,
+        // top: theme.spacing(1),
+        // color: theme.palette.grey[500],
+    },
+    clientName: {
+        marginBottom: 25,
+    },
+});
+
+function Alert(props) {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 
 function checkAdv(props) {
@@ -34,17 +77,25 @@ function checkAdv(props) {
 }
 
 
-export default class App extends Component {
-
+class App extends Component {
 
     state = {
+        isOpenModal: false,
         isLoading: true,
         content: [],
         url: "",
+        userShortLink: "",
         numbersSlider: [],
         coordinates: [],
-        mapData: []
+        mapData: [],
+        clientNameValue: '',
+        clientNameError: '',
+        clientPhoneValue: '+7',
+        clientPhoneError: '',
+        isClientRealtor: false,
+        snackOpen: false,
     }
+
 
     constructor(props) {
         super(props);
@@ -60,6 +111,7 @@ export default class App extends Component {
         this.focusToCoordinatesElement = this.focusToCoordinatesElement.bind(this);
 
     }
+
 
     focusToAboutElement() {
         window.scrollTo({
@@ -88,6 +140,88 @@ export default class App extends Component {
             top: this.coordinatesRef.current.offsetTop - 100,
             behavior: "smooth"
         })
+    }
+
+    handleClickOpen = () => {
+        console.log("OPEN ME")
+        this.setState({isOpenModal: true})
+        console.log(this.state.isOpenModal)
+    };
+
+    handleCancel = () => {
+        console.log("CANCEL ME")
+        this.setState({isOpenModal: false})
+    };
+
+    handleSend = () => {
+        console.log("SEND ME")
+        console.log("ClientName Value:")
+        console.log(this.state.clientNameValue)
+
+        if (this.state.clientNameValue && this.state.clientPhoneValue) {
+            let phone = this.state.clientPhoneValue
+                .replace('+', '')
+                .replace('(', '')
+                .replace(')', '')
+                .split(' ').join('')
+                .split('_').join('')
+            if (phone.length === 11) {
+                console.log("MATCH")
+                this.setState({clientNameError: ''})
+                this.setState({clientPhoneError: ''})
+
+                //отправить данные на сервер:
+                //Имя, номер, является ли риэлтором, id объявления
+                //todo переделать с localStorage!!!
+                axios.post(host_clientResponse + '/post',
+                    {
+                        clientName: this.state.clientNameValue,
+                        clientPhone: this.state.clientPhoneValue,
+                        isRealtor: this.state.isClientRealtor,
+                        advShortLink: localStorage.getItem('userLink'),
+                        advSourceLink: this.state.url,
+                    })
+                this.setState({isClientRealtor: false});
+                this.setState({isOpenModal: false})
+                this.setState({snackOpen: true});
+            } else {
+                this.setState({clientPhoneError: 'Введите полный номер телефона'})
+            }
+            //провалидировать номер телефона
+        } else {
+            if (!this.state.clientNameValue) {
+                this.setState({clientNameError: 'Введите имя'})
+            }
+            if (!this.state.clientPhoneValue) {
+                this.setState({clientPhoneError: 'Введите номер телефона'})
+            }
+        }
+    };
+
+    _handleClientNameChange = (e) => {
+        this.setState({
+            clientNameValue: e.target.value
+        });
+    }
+
+    _handleClientPhoneChange = (e) => {
+        this.setState({
+            clientPhoneValue: e.target.value
+        });
+    }
+
+    _handleIsClientRealtorChange = (e) => {
+        console.log("IS_REALTOR")
+        console.log(e)
+        this.setState({
+            isClientRealtor: e.target.checked
+        });
+    }
+
+    _handleSnackClose = () => {
+        this.setState({
+            snackOpen: false
+        });
     }
 
 
@@ -152,6 +286,7 @@ export default class App extends Component {
 
     render() {
         console.log("RENDER---------------")
+        const {classes} = this.props;
         if (this.state.isLoading === false) {
             return (
                 <div className="App">
@@ -171,6 +306,81 @@ export default class App extends Component {
                              }}>
                         <h1 className="heading__title">{this.state.content.headTop}</h1>
                     </section>
+                    <div>
+                        <Dialog open={this.state.isOpenModal} onClose={this.handleCancel}
+                                aria-labelledby="form-dialog-title">
+                            <DialogTitle id="form-dialog-title">Связаться с продавцом
+
+                            </DialogTitle>
+                            <IconButton aria-label="close" className={classes.closeButton} onClick={this.handleCancel}>
+                                <CloseIcon/>
+                            </IconButton>
+                            <DialogContent>
+                                <DialogContentText>
+                                    Нравится предложение? Есть вопросы или нужны уточнения?
+                                    <br/>
+                                    Оставьте контакты, и Продавец сразу же перезвонит
+                                </DialogContentText>
+                                <TextField
+                                    className={classes.clientName}
+                                    autoFocus
+                                    margin="dense"
+                                    id="clientName"
+                                    label="Как Вас зовут?"
+                                    type="text"
+                                    fullWidth
+                                    required
+                                    error={this.state.clientNameError}
+                                    value={this.state.clientNameValue}
+                                    onChange={this._handleClientNameChange}
+                                />
+                                <InputMask mask="+9 999 999 99 99"
+                                           maskChar=" "
+                                           value={this.state.clientPhoneValue}
+                                           onChange={this._handleClientPhoneChange}>
+                                    <TextField
+                                        autoFocus
+                                        margin="dense"
+                                        id="clientPhone"
+                                        label="Номер для связи"
+                                        type="text"
+                                        fullWidth
+                                        required
+                                        error={this.state.clientPhoneError}
+                                    >
+                                    </TextField>
+                                </InputMask>
+                                <FormControlLabel
+                                    value="isRealtor"
+                                    control={<Checkbox color="primary"/>}
+                                    label="Я - риэлтор"
+                                    labelPlacement="end"
+                                    onChange={this._handleIsClientRealtorChange}
+                                />
+                                <DialogContentText>Для риэлторов предусмотрено отдельное вознаграждение.
+                                    Отметьте этот пункт, если являетесь профессиональным участником
+                                    рынка.</DialogContentText>
+                            </DialogContent>
+                            <DialogActions>
+                                {/*<Button onClick={this.handleCancel} color="primary">*/}
+                                {/*    Отмена*/}
+                                {/*</Button>*/}
+                                <Button onClick={this.handleSend} color="blue" variant="outlined"
+                                        className={classes.root}>
+                                    Отправить
+                                </Button>
+                            </DialogActions>
+                        </Dialog>
+                        <Snackbar open={this.state.snackOpen}
+                                  autoHideDuration={3500}
+                                  onClose={this._handleSnackClose}
+                                  // anchorOrigin={vertical: 'bottom', horizontal: 'center'}
+                        >
+                            <Alert onClose={this._handleSnackClose} severity="success">
+                                "Спасибо! Ваши данные приняты."
+                            </Alert>
+                        </Snackbar>
+                    </div>
                     {/*Выпилить в отельный компонент*/}
                     <div className="modal-window" id="modal-window">
                         <div className="modal-window__wrap">
@@ -226,17 +436,18 @@ export default class App extends Component {
                         </div>
                     </div>
                     {/*Выпилить в отельный компонент*/}
-
                     <section className="section about-link">
                         <ul className="about-link__list">
                             <li className="about-link__item">
-                                <a href="#" onClick={this.focusToPhotosElement} className="about-link__link">Фото объекта</a>
+                                <a href="#" onClick={this.focusToPhotosElement} className="about-link__link">Фото
+                                    объекта</a>
                             </li>
                             <li className="about-link__item">
                                 <a href="#" onClick={this.focusToDescElement} className="about-link__link">Описание</a>
                             </li>
                             <li className="about-link__item">
-                                <a href="#" onClick={this.focusToAboutElement} className="about-link__link">О комплексе</a>
+                                <a href="#" onClick={this.focusToAboutElement} className="about-link__link">О
+                                    комплексе</a>
                             </li>
                             <li className="about-link__item">
                                 <a href="#" onClick={this.focusToCoordinatesElement}
@@ -247,7 +458,6 @@ export default class App extends Component {
                             </li>
                         </ul>
                     </section>
-
                     <section className="photo-obj">
                         <h2 ref={this.photosRef} className="section__title">Фото</h2>
                         <div className="swiper-container photo-obj-swiper">
@@ -311,7 +521,8 @@ export default class App extends Component {
                                         {this.state.content.price}
                                         <span className="flat-desc__mortgage">{this.state.content.priceComment}</span>
                                     </p>
-                                    <a href="#modal-window" data-fancybox="modal-window"
+                                    <a href="#" onClick={this.handleClickOpen}
+                                        // data-fancybox="modal-window"
                                        className="flat-desc__btn-contact">Связаться с продавцом</a>
                                 </div>
                             </div>
@@ -330,7 +541,7 @@ export default class App extends Component {
                     </section>
                     <section className="location">
                         <div ref={this.coordinatesRef} className="section__title">Расположение</div>
-                        <YMaps style={styles.YMaps}>
+                        <YMaps style={styles1.YMaps}>
                             <Map defaultState={this.state.mapData} className="location__map-wrap">
                                 {this.state.coordinates.map(coordinate => <Placemark geometry={coordinate}/>)}
                             </Map>
@@ -402,7 +613,6 @@ export default class App extends Component {
         } else {
             return null;
         }
-
     }
 }
 
@@ -490,3 +700,9 @@ function sliderTop(count, url) {
         </div>
     )
 }
+
+App.propTypes = {
+    classes: PropTypes.object.isRequired,
+};
+
+export default withStyles(styles)(App);

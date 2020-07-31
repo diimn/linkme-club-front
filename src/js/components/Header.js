@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {HOST, WEB_URL, WEB_URL_API} from '../consts'
+import {HOST, HOST_BASE, WEB_URL, WEB_URL_API} from '../consts'
 import {VK} from "react-vk"
 
 import {CopyToClipboard} from 'react-copy-to-clipboard';
@@ -107,7 +107,8 @@ function authVKAction(data) {
 
         console.log("VK_REPOST:" + data);
 
-        let link = "http://linkme.club" + window.location.pathname
+        // let link = "http://linkme.club" + window.location.pathname
+        let link = HOST_BASE + window.location.pathname
         // let img_link = "http://linkme.club" + window.location.pathname
         // "http://mydomainname.com/static/media/f-slider-1.db4ba8c6.jpg"
 
@@ -165,8 +166,9 @@ export default class Header extends Component {
             } else {
                 userLink = this.props.path;
             }
-            let address = 'http://' + WEB_URL + '/' + userLink
+            let address = HOST_BASE + '/' + userLink
             this.setState({userLink: address})
+            localStorage.setItem('userLink', userLink);
 
             if (this.props.path == null) {
                 window.location.replace(address)

@@ -42,34 +42,34 @@ export function postRender() {
     // });
 
 
-    $(document).ready(function () {
-
-        var modal = document.getElementById("modal-window");
-        // (function(){
-        let fancyB = document.querySelector('.flat-desc__btn-contact')
-        if (fancyB != null) {
-            fancyB.addEventListener('click', function () {
-                console.log("!!!!!!!!!!!!!!! click связаться");
-                modal.style.display = "block";
-            });
-        }
-
-
-        // modal.
-
-        // $('[data-fancybox="modal-window"]').fancybox({
-        //     touch: false,
-        // });
-
-        // })($.noConflict());
-
-        // $('#modal-tel').inputmask({
-        //     mask: '+7 (999) 999-99-99',
-        // });
-        // $('[data-fancybox="modal-window"]').fancybox({
-        //     touch: false,
-        // });
-    });
+    // $(document).ready(function () {
+    //
+    //     var modal = document.getElementById("modal-window");
+    //     // (function(){
+    //     let fancyB = document.querySelector('.flat-desc__btn-contact')
+    //     if (fancyB != null) {
+    //         fancyB.addEventListener('click', function () {
+    //             console.log("!!!!!!!!!!!!!!! click связаться");
+    //             modal.style.display = "block";
+    //         });
+    //     }
+    //
+    //
+    //     // modal.
+    //
+    //     // $('[data-fancybox="modal-window"]').fancybox({
+    //     //     touch: false,
+    //     // });
+    //
+    //     // })($.noConflict());
+    //
+    //     // $('#modal-tel').inputmask({
+    //     //     mask: '+7 (999) 999-99-99',
+    //     // });
+    //     // $('[data-fancybox="modal-window"]').fancybox({
+    //     //     touch: false,
+    //     // });
+    // });
 
     // Inputmask({ mask: '+7 (999) 999-9999' }).mask('#modal-tel');
 

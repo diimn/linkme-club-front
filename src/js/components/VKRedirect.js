@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import Cookies from "universal-cookie";
 
-import {HOST, WEB_URL, WEB_URL_API} from '../consts'
+import {HOST, PROTOCOL, WEB_URL, WEB_URL_API} from '../consts'
 
 import axios from 'axios'
 import {getUserLink, getUserLinkByUniqUrl} from "./Header";
@@ -56,7 +56,7 @@ export default class VKRedirect extends Component {
 
         console.log("redirect url: " + advUrl)
         //todo
-        window.location.replace("http://" + advUrl)
+        window.location.replace(PROTOCOL + advUrl)
     }
 
     render() {
