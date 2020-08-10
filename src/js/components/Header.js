@@ -1,8 +1,10 @@
 import React, {Component} from "react";
-import {HOST, HOST_BASE, WEB_URL, WEB_URL_API} from '../consts'
+import {FACEBOOK_AUTH_URL, HOST, HOST_BASE, WEB_URL, WEB_URL_API} from '../consts'
 import {VK} from "react-vk"
 
 import {CopyToClipboard} from 'react-copy-to-clipboard';
+import FacebookLogin from 'react-facebook-login';
+
 
 import '../main.js'
 
@@ -10,6 +12,8 @@ import '../main.js'
 import axios from 'axios'
 import Cookies from 'universal-cookie';
 import {postRender} from "../main";
+import Snackbar from "@material-ui/core/Snackbar";
+import MuiAlert from "@material-ui/lab/Alert";
 
 
 const hostUserProfile = HOST + "/user-profile";
@@ -79,6 +83,13 @@ function checkStatus() {
     return isAuth;
 }
 
+const responseFacebook = (response) => {
+    console.log(response);
+}
+const componentClicked = () => {
+    console.log("clicked");
+}
+
 function authVKAction(data) {
     if (!isAuth) {
         cookies.set('startPage', window.location.host,
@@ -126,6 +137,47 @@ function authVKAction(data) {
 
 }
 
+function authFBAction(data) {
+    console.log("FB_ACTION")
+    if (!isAuth) {
+        cookies.set('startPage', window.location.host,
+            {
+                sameSite: 'none',
+                domain: `.${WEB_URL}`
+            });
+        cookies.set('startUrl', window.location.pathname.substring(1),
+            {
+                sameSite: 'none',
+                domain: `.${WEB_URL}`
+            });
+        let address = FACEBOOK_AUTH_URL
+        console.log("authVKAction 1 " + isAuth)
+        window.location.replace(address)
+    } else {
+        //сделать репост
+        console.log("FB_REPOST");
+
+        console.log("FB_REPOST:" + data);
+
+        // let link = "http://linkme.club" + window.location.pathname
+        let link = HOST_BASE + window.location.pathname
+        // let img_link = "http://linkme.club" + window.location.pathname
+        // "http://mydomainname.com/static/media/f-slider-1.db4ba8c6.jpg"
+
+        let addr = "https://vk.com/share.php" +
+            "?url=" +
+            // window.location.href +
+            link +
+            "&title=" +
+            data
+        // "&image=" +
+        // img_link
+        window.open(addr)
+        // .then(window.location = '/')
+    }
+
+}
+
 
 function logOut() {
     console.log("LOGOUT")
@@ -140,8 +192,13 @@ function logOut() {
 }
 
 function cutHttp(str) {
-    return String(str).substr('http://'.length)
+    return String(str).substr('https://'.length)
 }
+
+function Alert(props) {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
+
 
 export default class Header extends Component {
     constructor(props) {
@@ -149,9 +206,12 @@ export default class Header extends Component {
         this.state = {
             isAuth: false,
             data: [],
-            userLink: []
+            userLink: [],
+            snackOpen: false,
+
         }
     }
+
 
     async componentDidMount() {
         isAuth = checkStatus();
@@ -174,6 +234,18 @@ export default class Header extends Component {
                 window.location.replace(address)
             }
         }
+    }
+
+    _handleSnackClose = () => {
+        this.setState({
+            snackOpen: false
+        });
+    }
+
+    _handleSnackOpen = () => {
+        this.setState({
+            snackOpen: true
+        });
     }
 
     render() {
@@ -223,7 +295,8 @@ export default class Header extends Component {
                                     <a href="#" className="header__social-link">
                                         <img src={require("../../img/fb-color.png")}
                                              alt="Фейсбук"
-                                             className="header__social-img"/></a>
+                                             className="header__social-img"
+                                             onClick={authFBAction}/></a>
                                 </li>
                             </ul>
                             <a href="#" className="header__more">Узнать больше</a>
@@ -240,15 +313,37 @@ export default class Header extends Component {
             // = getUser();
             return (
                 <header className="header user">
+                    <div>
+                        <Snackbar open={this.state.snackOpen}
+                                  autoHideDuration={3500}
+                                  onClose={this._handleSnackClose}
+                            // anchorOrigin={vertical: 'bottom', horizontal: 'center'}
+                        >
+                            <Alert onClose={this._handleSnackClose} severity="success">
+                                Ссылка скопирована
+                            </Alert>
+                        </Snackbar>
+                    </div>
                     <div className="header-hover section">
                         <div className="header-hover__wrap user-hover">
                             <div className="header-hover__item user-hover__item">
                                 <div className="header-hover__desc user-hover__desc">
                                     <p>
-                                        <button className="user-hover__copy">Кликни, чтобы скопировать</button>
+                                        <button className="user-hover__copy"
+                                                onClick={this._handleSnackOpen}
+                                        >
+                                            Кликни, чтобы скопировать
+                                        </button>
                                     </p>
                                     <span className="user-hover__oror">или</span>
-                                    Поделись в соц. сетях
+                                    {/*Поделись в соц. сетях*/}
+                                    <p>
+                                        <button className="user-hover__copy"
+                                                onClick={() => authVKAction(this.props.title)}
+                                        >
+                                            Поделись в соц. сетях
+                                        </button>
+                                    </p>
                                 </div>
                             </div>
                         </div>
@@ -270,7 +365,9 @@ export default class Header extends Component {
                                 </div>
                             </div>
                             <div className="user__header-wrap-need">
-                                <CopyToClipboard text={this.state.userLink}>
+                                <CopyToClipboard text={this.state.userLink}
+                                                 onCopy={this._handleSnackOpen}
+                                >
                                     <a href="#" className="header__site-link">{cutHttp(this.state.userLink)}</a>
                                 </CopyToClipboard>
                                 <ul className="header__social-list">
@@ -288,11 +385,6 @@ export default class Header extends Component {
                                     {/*    </a>*/}
                                     {/*</li>*/}
                                 </ul>
-                                {/*                                <button className="hamburger hamburger-user-js hamburger--minus" type="button">*/}
-                                {/*<span className="hamburger-box">*/}
-                                {/*<span className="hamburger-inner"></span>*/}
-                                {/*</span>*/}
-                                {/*                                </button>*/}
                             </div>
                             <a href="#" className="header__more">Узнать больше</a>
                         </div>

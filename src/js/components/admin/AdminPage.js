@@ -1,7 +1,6 @@
 import * as React from "react";
 import { Admin, Resource } from 'react-admin';
-// import simpleRestProvider from 'ra-data-simple-rest';
-import {HOST, WEB_URL, WEB_URL_API} from '../../consts'
+import {HOST} from '../../consts'
 import { AdvList, AdvEdit, AdvCreate, AdvIcon } from './Posts';
 import dataProvider from './CustomDataProvider'
 import authProvider from './AuthProvider'

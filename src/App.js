@@ -374,68 +374,17 @@ class App extends Component {
                         <Snackbar open={this.state.snackOpen}
                                   autoHideDuration={3500}
                                   onClose={this._handleSnackClose}
-                                  // anchorOrigin={vertical: 'bottom', horizontal: 'center'}
+                                  anchorOrigin={{
+                                      "horizontal": "center",
+                                      "vertical": "top",
+                                  }}
                         >
                             <Alert onClose={this._handleSnackClose} severity="success">
-                                "Спасибо! Ваши данные приняты."
+                                Спасибо! Заявка отправлена Продавцу.
                             </Alert>
                         </Snackbar>
                     </div>
-                    {/*Выпилить в отельный компонент*/}
-                    <div className="modal-window" id="modal-window">
-                        <div className="modal-window__wrap">
-                            <form className="modal-window__form">
-                                <div className="modal-window__item-wrap">
-                                    <label htmlFor="modal-name" className="modal-window__label">Ваше имя</label>
-                                    <div className="modal-window__rielt-wrap">
-                                        <input className="modal-window__input" placeholder="Андрей" type="text"
-                                               name="modal-name"
-                                               id="modal-name"/>
-                                        <label className="container-checkbox1 modal-window__item-check">Я риелтор
-                                            <input type="checkbox"/>
-                                            <span className="checkmark"/>
-                                        </label>
-                                    </div>
-                                </div>
-                                <div className="modal-window__item-wrap modal-window__item-numb">
-                                    <label form="modal-tel" className="modal-window__label">Ваш телефон</label>
 
-                                    <div className="modal-window__numb-wrap">
-                                        <input className="modal-window__input modal-window__input-js"
-                                               placeholder="+7 (___) ___-__-__"
-                                               type="tel" name="modal-tel" id="modal-tel"/>
-                                        <p className="modal-window__tel-desc">Вводите свой номер телефон и
-                                            получите
-                                            номер
-                                            телефона продавца
-                                        </p>
-                                    </div>
-                                </div>
-                                <div className="modal-window__item-wrap modal-window__item-sell">
-                                    <label className="modal-window__label">Телефон продавца</label>
-                                    <div className="modal-window__sell-wrap">
-                                        <div className="modal-window__sell-item"> +7</div>
-                                        <div className="modal-window__sell-item active"> 9</div>
-                                        <div className="modal-window__sell-item active"> 6</div>
-                                        <div className="modal-window__sell-item active"> 2</div>
-                                        <div className="modal-window__sell-item active"> 2</div>
-                                        <div className="modal-window__sell-item active"> 6</div>
-                                        <div className="modal-window__sell-item active"> 5</div>
-                                        <div className="modal-window__sell-item active"> 4</div>
-                                        <div className="modal-window__sell-item active"> 0</div>
-                                        <div className="modal-window__sell-item active"> 8</div>
-                                        <div className="modal-window__sell-item active"> 1</div>
-                                    </div>
-                                </div>
-                                <div className="modal-window__item-wrap modal-window__item-wrap-btn">
-                                    <button type="submit" className="modal-window__btn">Отправить свои данные</button>
-                                    <p className="modal-window__btn-desc">Нажимая на кнопку отправить, Вы даете
-                                        согласие на обработку персональных данных</p>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                    {/*Выпилить в отельный компонент*/}
                     <section className="section about-link">
                         <ul className="about-link__list">
                             <li className="about-link__item">
@@ -461,7 +410,8 @@ class App extends Component {
                     <section className="photo-obj">
                         <h2 ref={this.photosRef} className="section__title">Фото</h2>
                         <div className="swiper-container photo-obj-swiper">
-                            {sliderTop(this.state.numbersSlider.slider1Count, this.state.url)}
+                            {sliderTop(this.state.numbersSlider.slider1Count,
+                                this.state.url, this.state.content.slider1_comments)}
                             {/*<div className="swiper-wrapper">*/}
                             {/*    <div className="swiper-slide photo-obj__slide">*/}
                             {/*        <div className="photo-obj__img-wrap">*/}
@@ -676,23 +626,36 @@ function slider(count, url) {
     )
 }
 
-function sliderTop(count, url) {
+function sliderTop(count, url, slider1_comments) {
     const items = []
     console.log("SLIDER " + count)
+    console.log("SLIDER 1" + slider1_comments)
+    let commentsArray
+    if (slider1_comments) {
+        commentsArray = slider1_comments.split('|')
+    }
     for (let i = 0; i < count; i++) {
+        // console.log("SLIDER content " + i + ": " + commentsArray[i])
         let addr = host_images + `/downloadSliderPhoto?url=${url}&type=slider1&index=${i}`
-        items.push(<div className="swiper-slide">
-            <div className="photo-obj__img-wrap">
-                <img src={addr}
-                     alt="Фото комплекса"
-                     className="photo-obj__img"/>
-            </div>
-            <div className="photo-obj__desc">
-                <div className="photo-obj__desc-text">
-                    <p>Панорамные окна высотой 3,2 м</p>
+        items.push(
+            <div className="swiper-slide photo-obj__slide">
+                <div className="photo-obj__img-wrap">
+                    <img src={addr}
+                         alt="Фото комплекса"
+                         className="photo-obj__img"/>
                 </div>
+                {commentsArray && commentsArray[i] && commentsArray[i].trim() !== '' &&
+                <div className="photo-obj__desc-wrap">
+                    <div className="photo-obj__desc">
+                        <div className="photo-obj__desc-text">
+                            <p>{commentsArray[i]}</p>
+                        </div>
+                    </div>
+                </div>
+                }
+
             </div>
-        </div>)
+        )
     }
     return (
         <div className="swiper-wrapper">
