@@ -18,6 +18,7 @@ export default class VKRedirect extends Component {
         cookies.set('vkCode', code,
             {
                 sameSite: 'none',
+                secure: true,
                 domain: `.${WEB_URL}`
             });
 
@@ -33,6 +34,7 @@ export default class VKRedirect extends Component {
         cookies.set('vk_userId', res.data.socialId,
             {
                 sameSite: 'none',
+                secure: true,
                 domain: `.${WEB_URL}`
             });
 

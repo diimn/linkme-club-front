@@ -31,48 +31,6 @@ export function postRender() {
     });
 
 
-    // $('[data-fancybox="modal-window"]').fancybox({
-    //     touch: false,
-    // });
-
-
-    // $('[data-fancybox="modal-window"]').fancybox({
-    //     touch: false,
-    // });
-    // });
-
-
-    // $(document).ready(function () {
-    //
-    //     var modal = document.getElementById("modal-window");
-    //     // (function(){
-    //     let fancyB = document.querySelector('.flat-desc__btn-contact')
-    //     if (fancyB != null) {
-    //         fancyB.addEventListener('click', function () {
-    //             console.log("!!!!!!!!!!!!!!! click связаться");
-    //             modal.style.display = "block";
-    //         });
-    //     }
-    //
-    //
-    //     // modal.
-    //
-    //     // $('[data-fancybox="modal-window"]').fancybox({
-    //     //     touch: false,
-    //     // });
-    //
-    //     // })($.noConflict());
-    //
-    //     // $('#modal-tel').inputmask({
-    //     //     mask: '+7 (999) 999-99-99',
-    //     // });
-    //     // $('[data-fancybox="modal-window"]').fancybox({
-    //     //     touch: false,
-    //     // });
-    // });
-
-    // Inputmask({ mask: '+7 (999) 999-9999' }).mask('#modal-tel');
-
     if (document.querySelector('.header')) {
         let headerMain = document.querySelector('.header')
         let guestMain = document.querySelector('.main-header')
@@ -180,30 +138,6 @@ export function postRender() {
                 window.getSelection().removeAllRanges()
             })
         }
-    }
-
-    let activeNumbSell = function () {
-        let rdyNumb = numbInp.value.replace(/[^\d]/g, '')
-        let lenghtNumbs = rdyNumb.length
-
-        let items = document.querySelectorAll('.modal-window__sell-item')
-
-        if (lenghtNumbs > 1) {
-            items[lenghtNumbs - 1].classList.remove('active')
-
-            if (lenghtNumbs != 11) {
-                items[lenghtNumbs].classList.add('active')
-            }
-        } else {
-            items[1].classList.add('active')
-        }
-
-        console.log(rdyNumb)
-    }
-
-    let numbInp = document.querySelector('.modal-window__input-js')
-    if (numbInp != null) {
-        numbInp.oninput = activeNumbSell
     }
 }
 

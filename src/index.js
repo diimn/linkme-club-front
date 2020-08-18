@@ -11,6 +11,7 @@ import VKRedirect from "./js/components/VKRedirect";
 // import Login from "./js/components/login/Login";
 import ManagerPage from "./js/components/ManagerPage";
 import AdminPage from "./js/components/admin/AdminPage";
+import FBRedirect from "./js/components/FBRedirect";
 // import LandingPageMain from "./js/components/LandingPageMain";
 
 var hist = createBrowserHistory();
@@ -30,9 +31,11 @@ if (parsedData.length >= 3) {
     // если перешли по короткой ссылке, исключая служебные
 } else if (path != null && path.length > 1
     && !path.includes("vkredirect")
+    && !path.includes("fbredirect")
     && !path.includes("login")
     && !path.includes("managerPage")
     && !path.includes("adminPage")
+    && !path.includes("test")
 ) {
     console.log("path: " + path);
     ReactDOM.render(
@@ -48,6 +51,7 @@ if (parsedData.length >= 3) {
                 <Route path="/adminPage" component={AdminPage}/>
                 {/*<Route path="/profile-page" component={ProfilePage} />*/}
                 <Route path="/vkredirect" component={VKRedirect}/>
+                <Route path="/fbredirect" component={FBRedirect}/>
                 <Route path="/" component={LandingPage}/>
             </Switch>
         </Router>

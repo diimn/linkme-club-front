@@ -12,6 +12,7 @@ import MuiAlert from '@material-ui/lab/Alert';
 
 import InputMask from "react-input-mask";
 import PropTypes from 'prop-types';
+import {Helmet} from "react-helmet";
 
 import {YMaps, Map, Placemark, withYMaps} from "react-yandex-maps";
 import './css/plugins/swiper.css'
@@ -289,275 +290,288 @@ class App extends Component {
         const {classes} = this.props;
         if (this.state.isLoading === false) {
             return (
-                <div className="App">
-                    {/*-------------------------------------*/}
-                    <Header
-                        subDomain={this.props.subDomain}
-                        path={this.props.path}
-                        bonus={this.state.content.bonus}
-                        title={this.state.content.headTop}
-                    />
-                    <div className="space__head-wrap">
-                        <div className="space__head"/>
-                    </div>
-                    <section className="heading"
-                             style={{
-                                 backgroundImage: "url(" + host_images + `/downloadHeaderPhoto?url=${this.state.url}` + ")"
-                             }}>
-                        <h1 className="heading__title">{this.state.content.headTop}</h1>
-                    </section>
-                    <div>
-                        <Dialog open={this.state.isOpenModal} onClose={this.handleCancel}
-                                aria-labelledby="form-dialog-title">
-                            <DialogTitle id="form-dialog-title">Связаться с продавцом
+                <div>
+                    <Helmet
+                        title="Home"
+                        meta={[
+                            {property: 'og:url', content: 'https://LinkMe.club'},
+                            {property: 'og:title', content: 'LinkMe.club'},
+                            {property: 'og:description', content: "TEST_TEST"},
+                            {property: 'og:image', content: "http://static01.nyt.com/images/2015/02/19/arts/international/19iht-btnumbers19A/19iht-btnumbers19A-facebookJumbo-v2.jpg"},
+                            // Any other meta tags go here as objects or you can just add children directly inside this component.
+                        ]}/>
+                    <div className="App">
+                        {/*-------------------------------------*/}
+                        <Header
+                            subDomain={this.props.subDomain}
+                            path={this.props.path}
+                            bonus={this.state.content.bonus}
+                            title={this.state.content.headTop}
+                        />
+                        <div className="space__head-wrap">
+                            <div className="space__head"/>
+                        </div>
+                        <section className="heading"
+                                 style={{
+                                     backgroundImage: "url(" + host_images + `/downloadHeaderPhoto?url=${this.state.url}` + ")"
+                                 }}>
+                            <h1 className="heading__title">{this.state.content.headTop}</h1>
+                        </section>
+                        <div>
+                            <Dialog open={this.state.isOpenModal} onClose={this.handleCancel}
+                                    aria-labelledby="form-dialog-title">
+                                <DialogTitle id="form-dialog-title">Связаться с продавцом
 
-                            </DialogTitle>
-                            <IconButton aria-label="close" className={classes.closeButton} onClick={this.handleCancel}>
-                                <CloseIcon/>
-                            </IconButton>
-                            <DialogContent>
-                                <DialogContentText>
-                                    Нравится предложение? Есть вопросы или нужны уточнения?
-                                    <br/>
-                                    Оставьте контакты, и Продавец сразу же перезвонит
-                                </DialogContentText>
-                                <TextField
-                                    className={classes.clientName}
-                                    autoFocus
-                                    margin="dense"
-                                    id="clientName"
-                                    label="Как Вас зовут?"
-                                    type="text"
-                                    fullWidth
-                                    required
-                                    error={this.state.clientNameError}
-                                    value={this.state.clientNameValue}
-                                    onChange={this._handleClientNameChange}
-                                />
-                                <InputMask mask="+9 999 999 99 99"
-                                           maskChar=" "
-                                           value={this.state.clientPhoneValue}
-                                           onChange={this._handleClientPhoneChange}>
+                                </DialogTitle>
+                                <IconButton aria-label="close" className={classes.closeButton}
+                                            onClick={this.handleCancel}>
+                                    <CloseIcon/>
+                                </IconButton>
+                                <DialogContent>
+                                    <DialogContentText>
+                                        Нравится предложение? Есть вопросы или нужны уточнения?
+                                        <br/>
+                                        Оставьте контакты, и Продавец сразу же перезвонит
+                                    </DialogContentText>
                                     <TextField
+                                        className={classes.clientName}
                                         autoFocus
                                         margin="dense"
-                                        id="clientPhone"
-                                        label="Номер для связи"
+                                        id="clientName"
+                                        label="Как Вас зовут?"
                                         type="text"
                                         fullWidth
                                         required
-                                        error={this.state.clientPhoneError}
-                                    >
-                                    </TextField>
-                                </InputMask>
-                                <FormControlLabel
-                                    value="isRealtor"
-                                    control={<Checkbox color="primary"/>}
-                                    label="Я - риэлтор"
-                                    labelPlacement="end"
-                                    onChange={this._handleIsClientRealtorChange}
-                                />
-                                <DialogContentText>Для риэлторов предусмотрено отдельное вознаграждение.
-                                    Отметьте этот пункт, если являетесь профессиональным участником
-                                    рынка.</DialogContentText>
-                            </DialogContent>
-                            <DialogActions>
-                                {/*<Button onClick={this.handleCancel} color="primary">*/}
-                                {/*    Отмена*/}
-                                {/*</Button>*/}
-                                <Button onClick={this.handleSend} color="blue" variant="outlined"
-                                        className={classes.root}>
-                                    Отправить
-                                </Button>
-                            </DialogActions>
-                        </Dialog>
-                        <Snackbar open={this.state.snackOpen}
-                                  autoHideDuration={3500}
-                                  onClose={this._handleSnackClose}
-                                  anchorOrigin={{
-                                      "horizontal": "center",
-                                      "vertical": "top",
-                                  }}
-                        >
-                            <Alert onClose={this._handleSnackClose} severity="success">
-                                Спасибо! Заявка отправлена Продавцу.
-                            </Alert>
-                        </Snackbar>
-                    </div>
-
-                    <section className="section about-link">
-                        <ul className="about-link__list">
-                            <li className="about-link__item">
-                                <a href="#" onClick={this.focusToPhotosElement} className="about-link__link">Фото
-                                    объекта</a>
-                            </li>
-                            <li className="about-link__item">
-                                <a href="#" onClick={this.focusToDescElement} className="about-link__link">Описание</a>
-                            </li>
-                            <li className="about-link__item">
-                                <a href="#" onClick={this.focusToAboutElement} className="about-link__link">О
-                                    комплексе</a>
-                            </li>
-                            <li className="about-link__item">
-                                <a href="#" onClick={this.focusToCoordinatesElement}
-                                   className="about-link__link">Местоположение</a>
-                            </li>
-                            <li className="about-link__item about-link__border">
-                                <a className="about-link__link">Заработай на продаже объекта</a>
-                            </li>
-                        </ul>
-                    </section>
-                    <section className="photo-obj">
-                        <h2 ref={this.photosRef} className="section__title">Фото</h2>
-                        <div className="swiper-container photo-obj-swiper">
-                            {sliderTop(this.state.numbersSlider.slider1Count,
-                                this.state.url, this.state.content.slider1_comments)}
-                            {/*<div className="swiper-wrapper">*/}
-                            {/*    <div className="swiper-slide photo-obj__slide">*/}
-                            {/*        <div className="photo-obj__img-wrap">*/}
-                            {/*            <img src={require('./img/f-slider-1.jpg')} alt="Фото объекта"*/}
-                            {/*                 className="photo-obj__img"/>*/}
-                            {/*        </div>*/}
-                            {/*        <div className="photo-obj__desc-wrap">*/}
-                            {/*            <div className="photo-obj__desc">*/}
-                            {/*                <div className="photo-obj__desc-text">*/}
-                            {/*                    <p>Панорамные окна высотой 3,2 м</p>*/}
-                            {/*                </div>*/}
-                            {/*            </div>*/}
-                            {/*        </div>*/}
-                            {/*    </div>*/}
-                            {/*    <div className="swiper-slide photo-obj__slide">*/}
-                            {/*        <div className="photo-obj__img-wrap">*/}
-                            {/*            <img src={require('./img/holder_slider.jpg')} alt="Фото объекта"*/}
-                            {/*                 className="photo-obj__img"/>*/}
-                            {/*        </div>*/}
-                            {/*        <div className="photo-obj__desc">*/}
-                            {/*            <div className="photo-obj__desc-text">*/}
-                            {/*                <p>Панорамные окна высотой 3,2 м</p>*/}
-                            {/*            </div>*/}
-                            {/*        </div>*/}
-                            {/*    </div>*/}
-                            {/*</div>*/}
-                            <div className="swiper-pagination"/>
+                                        error={this.state.clientNameError}
+                                        value={this.state.clientNameValue}
+                                        onChange={this._handleClientNameChange}
+                                    />
+                                    <InputMask mask="+9 999 999 99 99"
+                                               maskChar=" "
+                                               value={this.state.clientPhoneValue}
+                                               onChange={this._handleClientPhoneChange}>
+                                        <TextField
+                                            autoFocus
+                                            margin="dense"
+                                            id="clientPhone"
+                                            label="Номер для связи"
+                                            type="text"
+                                            fullWidth
+                                            required
+                                            error={this.state.clientPhoneError}
+                                        >
+                                        </TextField>
+                                    </InputMask>
+                                    <FormControlLabel
+                                        value="isRealtor"
+                                        control={<Checkbox color="primary"/>}
+                                        label="Я - риэлтор"
+                                        labelPlacement="end"
+                                        onChange={this._handleIsClientRealtorChange}
+                                    />
+                                    <DialogContentText>Для риэлторов предусмотрено отдельное вознаграждение.
+                                        Отметьте этот пункт, если являетесь профессиональным участником
+                                        рынка.</DialogContentText>
+                                </DialogContent>
+                                <DialogActions>
+                                    {/*<Button onClick={this.handleCancel} color="primary">*/}
+                                    {/*    Отмена*/}
+                                    {/*</Button>*/}
+                                    <Button onClick={this.handleSend} color="blue" variant="outlined"
+                                            className={classes.root}>
+                                        Отправить
+                                    </Button>
+                                </DialogActions>
+                            </Dialog>
+                            <Snackbar open={this.state.snackOpen}
+                                      autoHideDuration={3500}
+                                      onClose={this._handleSnackClose}
+                                      anchorOrigin={{
+                                          "horizontal": "center",
+                                          "vertical": "top",
+                                      }}
+                            >
+                                <Alert onClose={this._handleSnackClose} severity="success">
+                                    Спасибо! Заявка отправлена Продавцу.
+                                </Alert>
+                            </Snackbar>
                         </div>
-                    </section>
-                    <section className="flat-desc">
-                        <div ref={this.descRef} className="section">
-                            <div className="flat-desc__wrap-all">
-                                <div className="flat-desc__img-human">
-                                    <div className="flat-desc__img-wrap">
-                                        {/*<img src={require('./img/human.jpg')} alt="Картинка продавца"*/}
-                                        <img src={host_images + `/downloadBrokerPhoto?url=${this.state.url}`}
-                                             alt="Картинка продавца"
-                                             className="flat-desc__img"/>
-                                    </div>
-                                    <p className="flat-desc__about-human">
-                                        {this.state.content.brokerName}
-                                        <span className="flat-desc__desc-human">
+
+                        <section className="section about-link">
+                            <ul className="about-link__list">
+                                <li className="about-link__item">
+                                    <a href="#" onClick={this.focusToPhotosElement} className="about-link__link">Фото
+                                        объекта</a>
+                                </li>
+                                <li className="about-link__item">
+                                    <a href="#" onClick={this.focusToDescElement}
+                                       className="about-link__link">Описание</a>
+                                </li>
+                                <li className="about-link__item">
+                                    <a href="#" onClick={this.focusToAboutElement} className="about-link__link">О
+                                        комплексе</a>
+                                </li>
+                                <li className="about-link__item">
+                                    <a href="#" onClick={this.focusToCoordinatesElement}
+                                       className="about-link__link">Местоположение</a>
+                                </li>
+                                <li className="about-link__item about-link__border">
+                                    <a className="about-link__link">Заработай на продаже объекта</a>
+                                </li>
+                            </ul>
+                        </section>
+                        <section className="photo-obj">
+                            <h2 ref={this.photosRef} className="section__title">Фото</h2>
+                            <div className="swiper-container photo-obj-swiper">
+                                {sliderTop(this.state.numbersSlider.slider1Count,
+                                    this.state.url, this.state.content.slider1_comments)}
+                                {/*<div className="swiper-wrapper">*/}
+                                {/*    <div className="swiper-slide photo-obj__slide">*/}
+                                {/*        <div className="photo-obj__img-wrap">*/}
+                                {/*            <img src={require('./img/f-slider-1.jpg')} alt="Фото объекта"*/}
+                                {/*                 className="photo-obj__img"/>*/}
+                                {/*        </div>*/}
+                                {/*        <div className="photo-obj__desc-wrap">*/}
+                                {/*            <div className="photo-obj__desc">*/}
+                                {/*                <div className="photo-obj__desc-text">*/}
+                                {/*                    <p>Панорамные окна высотой 3,2 м</p>*/}
+                                {/*                </div>*/}
+                                {/*            </div>*/}
+                                {/*        </div>*/}
+                                {/*    </div>*/}
+                                {/*    <div className="swiper-slide photo-obj__slide">*/}
+                                {/*        <div className="photo-obj__img-wrap">*/}
+                                {/*            <img src={require('./img/holder_slider.jpg')} alt="Фото объекта"*/}
+                                {/*                 className="photo-obj__img"/>*/}
+                                {/*        </div>*/}
+                                {/*        <div className="photo-obj__desc">*/}
+                                {/*            <div className="photo-obj__desc-text">*/}
+                                {/*                <p>Панорамные окна высотой 3,2 м</p>*/}
+                                {/*            </div>*/}
+                                {/*        </div>*/}
+                                {/*    </div>*/}
+                                {/*</div>*/}
+                                <div className="swiper-pagination"/>
+                            </div>
+                        </section>
+                        <section className="flat-desc">
+                            <div ref={this.descRef} className="section">
+                                <div className="flat-desc__wrap-all">
+                                    <div className="flat-desc__img-human">
+                                        <div className="flat-desc__img-wrap">
+                                            {/*<img src={require('./img/human.jpg')} alt="Картинка продавца"*/}
+                                            <img src={host_images + `/downloadBrokerPhoto?url=${this.state.url}`}
+                                                 alt="Картинка продавца"
+                                                 className="flat-desc__img"/>
+                                        </div>
+                                        <p className="flat-desc__about-human">
+                                            {this.state.content.brokerName}
+                                            <span className="flat-desc__desc-human">
                                             {this.state.content.brokerComment}
                                         </span>
-                                    </p>
-                                </div>
-                                <div className="flat-desc__main-desc">
-                                    <p className="flat-desc__header">
-                                        {this.state.content.descHead}
-                                    </p>
-                                    <span className="flat-desc__paragraph">
+                                        </p>
+                                    </div>
+                                    <div className="flat-desc__main-desc">
+                                        <p className="flat-desc__header">
+                                            {this.state.content.descHead}
+                                        </p>
+                                        <span className="flat-desc__paragraph">
                                         {textFormatter(this.state.content.description)}
                                     </span>
-                                </div>
-                                <div className="flat-desc__price">
-                                    <p className="flat-desc__price-text">
-                                        {this.state.content.price}
-                                        <span className="flat-desc__mortgage">{this.state.content.priceComment}</span>
-                                    </p>
-                                    <a href="#" onClick={this.handleClickOpen}
-                                        // data-fancybox="modal-window"
-                                       className="flat-desc__btn-contact">Связаться с продавцом</a>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
-                    <section ref={this.aboutRef} className="about-comp">
-                        <h2 className="section__title">О комплексе</h2>
-                        <div className="swiper-container about-comp-swiper">
-                            {slider(this.state.numbersSlider.slider2Count, this.state.url)}
-                            <div className="swiper-button-prev about-comp-prev"/>
-                            <div className="swiper-button-next about-comp-next"/>
-                        </div>
-                        <ul className="section about-comp__desc-list">
-                            {bulletFormatter(this.state.content.bullets)}
-                        </ul>
-                    </section>
-                    <section className="location">
-                        <div ref={this.coordinatesRef} className="section__title">Расположение</div>
-                        <YMaps style={styles1.YMaps}>
-                            <Map defaultState={this.state.mapData} className="location__map-wrap">
-                                {this.state.coordinates.map(coordinate => <Placemark geometry={coordinate}/>)}
-                            </Map>
-                        </YMaps>
-                    </section>
-                    <footer className="section footer">
-                        <div className="footer__wrap">
-                            <div className="footer__two-colums">
-                                <div className="footer__colum">
-                                    <a href="" className="footer__logo">
-                                        <div className="footer__img-wrap"><img
-                                            src={require('./img/landing/logo.png')}
-                                            alt="Логотип сайта"
-                                            className="footer__img"/></div>
-                                        <p className="footer__service">Сервис распространения объявлений</p>
-                                    </a>
-                                    <p className="footer__paragraph footer__copyright">
-                                        LinkMe Club © Copyright 2020
-                                    </p>
-                                </div>
-                                <div className="footer__colum">
-                                    <ul className="footer__list">
-                                        <li className="footer__item-list">
-                                            <a href="" className="footer__item-link">О проекте</a>
-                                        </li>
-                                        <li className="footer__item-list">
-                                            <a href="" className="footer__item-link">Все объявления</a>
-                                        </li>
-                                        <li className="footer__item-list">
-                                            <a href="" className="footer__item-link">Помощь</a>
-                                        </li>
-                                        <li className="footer__item-list">
-                                            <a href="" className="footer__item-link">Контакты</a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div className="footer__two-colums">
-                                <div className="footer__colum footer__political">
-                                    <div className="footer__socials">
-                                        <a href="#" className="footer__social">
-                                            <img src={require("./img/social-telegram.png")}
-                                                 alt="Иконка телеграмма"
-                                                 className="footer__social-img"/>
-                                        </a>
-                                        <a href="#" className="footer__social">
-                                            <img src={require("./img/social-inst.png")} alt="Иконка ins"
-                                                 className="footer__social-img"/>
-                                        </a>
-                                        <a href="#" className="footer__social">
-                                            <img src={require("./img/social-facebook.png")} alt="Иконка fb"
-                                                 className="footer__social-img"/>
-                                        </a>
                                     </div>
-                                    <a href="#" className="footer__political">Политика конфиденциальности</a>
-                                </div>
-                                <div className="footer__colum footer__last">
-                                    <a href="#" className="footer__quest">Задать вопрос</a>
-                                    <a className="footer__link-mail"
-                                       href="mailto:info@site-project.ru">info@linkme.club</a>
-                                    <a href="#" className="footer__circs">Условия использования</a>
+                                    <div className="flat-desc__price">
+                                        <p className="flat-desc__price-text">
+                                            {this.state.content.price}
+                                            <span
+                                                className="flat-desc__mortgage">{this.state.content.priceComment}</span>
+                                        </p>
+                                        <a href="#" onClick={this.handleClickOpen}
+                                           className="flat-desc__btn-contact">Связаться с продавцом</a>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </footer>
-                    }
+                        </section>
+                        <section ref={this.aboutRef} className="about-comp">
+                            <h2 className="section__title">О комплексе</h2>
+                            <div className="swiper-container about-comp-swiper">
+                                {slider(this.state.numbersSlider.slider2Count, this.state.url)}
+                                <div className="swiper-button-prev about-comp-prev"/>
+                                <div className="swiper-button-next about-comp-next"/>
+                            </div>
+                            <ul className="section about-comp__desc-list">
+                                {bulletFormatter(this.state.content.bullets)}
+                            </ul>
+                        </section>
+                        <section className="location">
+                            <div ref={this.coordinatesRef} className="section__title">Расположение</div>
+                            <YMaps style={styles1.YMaps}>
+                                <Map defaultState={this.state.mapData} className="location__map-wrap">
+                                    {this.state.coordinates.map(coordinate => <Placemark geometry={coordinate}/>)}
+                                </Map>
+                            </YMaps>
+                        </section>
+                        <footer className="section footer">
+                            <div className="footer__wrap">
+                                <div className="footer__two-colums">
+                                    <div className="footer__colum">
+                                        <a href="" className="footer__logo">
+                                            <div className="footer__img-wrap"><img
+                                                src={require('./img/landing/logo.png')}
+                                                alt="Логотип сайта"
+                                                className="footer__img"/></div>
+                                            <p className="footer__service">Сервис распространения объявлений</p>
+                                        </a>
+                                        <p className="footer__paragraph footer__copyright">
+                                            LinkMe Club © Copyright 2020
+                                        </p>
+                                    </div>
+                                    <div className="footer__colum">
+                                        <ul className="footer__list">
+                                            <li className="footer__item-list">
+                                                <a href="" className="footer__item-link">О проекте</a>
+                                            </li>
+                                            <li className="footer__item-list">
+                                                <a href="" className="footer__item-link">Все объявления</a>
+                                            </li>
+                                            <li className="footer__item-list">
+                                                <a href="" className="footer__item-link">Помощь</a>
+                                            </li>
+                                            <li className="footer__item-list">
+                                                <a href="" className="footer__item-link">Контакты</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div className="footer__two-colums">
+                                    <div className="footer__colum footer__political">
+                                        <div className="footer__socials">
+                                            <a href="#" className="footer__social">
+                                                <img src={require("./img/social-telegram.png")}
+                                                     alt="Иконка телеграмма"
+                                                     className="footer__social-img"/>
+                                            </a>
+                                            <a href="#" className="footer__social">
+                                                <img src={require("./img/social-inst.png")} alt="Иконка ins"
+                                                     className="footer__social-img"/>
+                                            </a>
+                                            <a href="#" className="footer__social">
+                                                <img src={require("./img/social-facebook.png")} alt="Иконка fb"
+                                                     className="footer__social-img"/>
+                                            </a>
+                                        </div>
+                                        <a href="#" className="footer__political">Политика конфиденциальности</a>
+                                    </div>
+                                    <div className="footer__colum footer__last">
+                                        <a href="#" className="footer__quest">Задать вопрос</a>
+                                        <a className="footer__link-mail"
+                                           href="mailto:info@site-project.ru">info@linkme.club</a>
+                                        <a href="#" className="footer__circs">Условия использования</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </footer>
+                        }
+                    </div>
                 </div>
             );
         } else {

@@ -1176,8 +1176,8 @@ body.menu-active {
   margin-top: 35px;
 }
 
-.be-partner__item-check .modal-window__label,
-.feedback__item-check .modal-window__label {
+.be-partner__item-check ,
+.feedback__item-check  {
   text-align: left;
   margin-right: 0;
   margin-left: 21px;
