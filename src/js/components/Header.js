@@ -1,10 +1,7 @@
 import React, {Component} from "react";
 import {FACEBOOK_AUTH_URL, host_user, HOST_BASE, WEB_URL, WEB_URL_API, host_repost, FACEBOOK_APP_ID} from '../consts'
-import {VK} from "react-vk"
-import {Helmet} from "react-helmet";
 
 import {CopyToClipboard} from 'react-copy-to-clipboard';
-import FacebookLogin from 'react-facebook-login';
 
 
 import '../main.js'

@@ -8,11 +8,10 @@ import {Router, Route, Switch} from "react-router-dom";
 import * as serviceWorker from './serviceWorker';
 import LandingPage from "./js/components/LandingPage";
 import VKRedirect from "./js/components/VKRedirect";
-// import Login from "./js/components/login/Login";
+
 import ManagerPage from "./js/components/ManagerPage";
 import AdminPage from "./js/components/admin/AdminPage";
 import FBRedirect from "./js/components/FBRedirect";
-// import LandingPageMain from "./js/components/LandingPageMain";
 
 var hist = createBrowserHistory();
 

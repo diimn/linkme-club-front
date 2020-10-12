@@ -32,7 +32,6 @@
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1",
-    "react-vk": "^5.0.2",
     "react-yandex-maps": "^4.4.0",
     "swiper": "^5.4.1"
   },
