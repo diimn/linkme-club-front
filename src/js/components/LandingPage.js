@@ -554,7 +554,7 @@ export default class LandingPage extends Component {
                 <script type="text/javascript" src="js/plugins/jquery-3.4.1.min.js"></script>
                 <script type="text/javascript" src="js/plugins/lazyload.min.js"></script>
                 <script type="text/javascript" src="js/plugins/jquery.fancybox.min.js"></script>
-                <script type="text/javascript" src="js/plugins/jquery.inputmask.min.js"></script>
+                {/*<script type="text/javascript" src="js/plugins/jquery.inputmask.min.js"></script>*/}
                 {/*<script type="text/javascript" src="js/main.js"></script>*/}
                 </body>
             )

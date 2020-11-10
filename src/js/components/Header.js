@@ -360,9 +360,7 @@ export default class Header extends Component {
                                     <div className="header-hover__desc user-hover__desc">
                                         <p>
                                             <button className="user-hover__copy"
-                                                    onClick={this._handleSnackOpen}
-                                            >
-                                                Кликни, чтобы скопировать
+                                                    onClick={this._handleSnackOpen}>Кликни, чтобы скопировать
                                             </button>
                                         </p>
                                         <span className="user-hover__oror">или</span>

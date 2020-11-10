@@ -1,5 +1,5 @@
 import $ from 'jquery'
-import Inputmask from 'inputmask'
+// import Inputmask from 'inputmask'
 import Swiper from 'swiper'
 // import './plugins/jquery.fancybox.min.js'
 // import fancybox from 'fancybox'

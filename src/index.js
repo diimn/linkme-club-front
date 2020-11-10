@@ -24,7 +24,7 @@ console.log(domain)
 //Если есть субдомен(перешли по исходной ссылке)
 if (parsedData.length >= 3) {
     const subDomain = parsedData[0];
-    ReactDOM.render(
+    ReactDOM.hydrate(
         <App subDomain={subDomain}/>, document.getElementById('root')
     );
     // если перешли по короткой ссылке, исключая служебные
@@ -37,12 +37,12 @@ if (parsedData.length >= 3) {
     && !path.includes("test")
 ) {
     console.log("path: " + path);
-    ReactDOM.render(
+    ReactDOM.hydrate(
         <App path={path}/>, document.getElementById('root')
     );
     //обработка служебных ссылок и заглавной страницы
 } else {
-    ReactDOM.render(
+    ReactDOM.hydrate(
         <Router history={hist}>
             <Switch>
                 {/*<Route path="/login" component={Login}/>*/}
