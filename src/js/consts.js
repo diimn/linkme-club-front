@@ -1,14 +1,14 @@
 //dev configuration
-// export const WEB_URL_API = "localhost:5000";
-// export const WEB_URL = "linkme.clud";
 // export const PROTOCOL = "https://";
-// export const API_PROTOCOL = "http://";
+// export const WEB_URL = "linkme.clud";
+export const WEB_URL_API = "localhost:5000";
+export const API_PROTOCOL = "http://";
 
 //prod configuration
-export const WEB_URL_API = "linkme.club";
+// export const WEB_URL_API = "linkme.club";
+// export const API_PROTOCOL = "https://";
 export const WEB_URL = "linkme.club";
 export const PROTOCOL = "https://";
-export const API_PROTOCOL = "https://";
 
 
 export const HOST_BASE = PROTOCOL + WEB_URL;
