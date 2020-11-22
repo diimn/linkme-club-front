@@ -21,45 +21,6 @@ app.listen(PORT, () => {
     console.log(`App launched on ${PORT}`);
 });
 
-function getWrapData() {
-    return wrap(async (req, res, next) => {
-        console.log('Request URL1:', req.url);
-        var data = req.params.data;
-        if (!data.includes('static') && !data.includes('.')) {
-            console.log('Request URL1_1:', data);
-            const result = await axios.get('http://localhost:5000/api/v1/ogc/getByUniqUrl/' + data)
-            console.log("Res: " + result.data.title)
-            fs.readFile(path.resolve("./build/index.html"), "utf-8", (err, data) => {
-                if (err) {
-                    console.log(err);
-                    return res.status(500).send("Some error happened");
-                }
-                return res.send(
-                    data
-                        .replace(
-                            '__TITLE__',
-                            result.data.title
-                        )
-                        .replace(
-                            '__IMAGE__',
-                            'https://images.netpeak.net/blog/zdes-image.webp'
-                        )
-                        .replace(
-                            '__DESCRIPTION__',
-                            result.data.description
-                        )
-                        .replace(
-                            '<div id="root"></div>',
-                            `<div id="root">${ReactDOMServer.renderToString(<App/>)}</div>`
-                        )
-                );
-            });
-        } else {
-            next();
-        }
-
-    });
-}
 
 function getWrapService() {
     return wrap(async (req, res, next) => {
@@ -80,6 +41,22 @@ function getWrapService() {
     });
 }
 
+function getWrapData() {
+    return wrap(async (req, res, next) => {
+        console.log('Request URL1:', req.url);
+        var data = req.params.data;
+        if (!data.includes('static') && !data.includes('.')) {
+            console.log('Request URL1_1:', data);
+            const result = await axios.get('http://localhost:5000/api/v1/ogc/getByUniqUrl/' + data)
+            console.log("Res: " + result.data.title)
+            processMetaTags(res, result);
+        } else {
+            next();
+        }
+    });
+}
+
+
 function getWrapSubdomain() {
     return wrap(async (req, res, next) => {
         console.log('Request URL:', req.url);
@@ -88,33 +65,26 @@ function getWrapSubdomain() {
         let url = req.subdomains
         console.log('Request URL1_1:', data);
         const result = await axios.get('http://localhost:5000/api/v1/ogc/getByUrl/' + url)
-
-        fs.readFile(path.resolve("./build/index.html"), "utf-8", (err, data) => {
-            if (err) {
-                console.log(err);
-                return res.status(500).send("Some error happened");
-            }
-            return res.send(
-                data
-                    .replace(
-                        '__TITLE__',
-                        result.data.title
-                    )
-                    .replace(
-                        '__IMAGE__',
-                        'https://images.netpeak.net/blog/zdes-image.webp'
-                    )
-                    .replace(
-                        '__DESCRIPTION__',
-                        result.data.description
-                    )
-                    .replace(
-                        '<div id="root"></div>',
-                        `<div id="root">${ReactDOMServer.renderToString(<App/>)}</div>`
-                    )
-            );
-        });
+        console.log("Res: " + result.data.title)
+        processMetaTags(res, result);
     });
 }
+
+function processMetaTags(res, result) {
+    fs.readFile(path.resolve("./build/index.html"), "utf-8", (err, data) => {
+        if (err) {
+            console.log(err);
+            return res.status(500).send("Some error happened");
+        }
+        return res.send(data
+            .replace('__TITLE__', result.data.title)
+            .replace('__IMAGE__', 'https://images.netpeak.net/blog/zdes-image.webp')
+            .replace('__DESCRIPTION__', result.data.description)
+            .replace('<div id="root"></div>',
+                `<div id="root">${ReactDOMServer.renderToString(<App/>)}</div>`)
+        );
+    });
+}
+
 
 
