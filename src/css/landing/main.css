@@ -304,7 +304,7 @@ body.menu-active {
   font-size: 16px;
   line-height: 19px;
   color: #575757;
-  max-width: 340px;
+  /*max-width: 340px;*/
   margin-bottom: 20px;
 }
 
@@ -501,7 +501,7 @@ body.menu-active {
 
 .member__link {
   color: #196af5;
-  text-decoration: underline;
+  /*text-decoration: underline;*/
   margin-top: 25px;
   display: inline-block;
   font-weight: bold;
@@ -1284,6 +1284,7 @@ body.menu-active {
   }
   .partners__button {
     min-width: 213px;
+    height: fit-content;
     padding: 24px 40px;
   }
   .announce .section__title {
@@ -1420,6 +1421,7 @@ body.menu-active {
   .partners__button {
     margin: 0 auto;
     width: 300px;
+    height: fit-content;
     text-align: center;
     padding: 20px 30px;
   }

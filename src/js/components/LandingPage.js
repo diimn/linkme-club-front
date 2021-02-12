@@ -1,14 +1,81 @@
 import React, {Component} from "react";
-import Header from "./Header";
 
 import '../../css/landing/plugins/jquery.fancybox.min.css'
 import '../../css/landing/plugins/hamburgers.min.css'
 import '../../css/landing/normalize.css'
 import '../../css/landing/main.css'
+import Dialog from "@material-ui/core/Dialog";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import IconButton from "@material-ui/core/IconButton";
+import CloseIcon from "@material-ui/icons/Close";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import TextField from "@material-ui/core/TextField";
+import InputMask from "react-input-mask";
+import DialogActions from "@material-ui/core/DialogActions";
+import Button from "@material-ui/core/Button";
+import Snackbar from "@material-ui/core/Snackbar";
+import PropTypes from "prop-types";
+import {withStyles} from "@material-ui/styles";
+import MuiAlert from "@material-ui/lab/Alert";
+import axios from "axios";
+import {HOST, host_clientResponse} from "../consts";
 
-export default class LandingPage extends Component {
+const styles = theme => ({
+
+    closeButton: {
+        position: 'absolute',
+        right: 0,
+        // top: theme.spacing(1),
+        // color: theme.palette.grey[500],
+    }
+});
+
+function Alert(props) {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
+
+
+class LandingPage extends Component {
+
+
+    state = {
+        isOpenModalCatalog: false,
+        isOpenModalBecomePartner: false,
+        snackOpen: false,
+        partnerNameValue: '',
+        partnerNameError: '',
+        partnerPhoneValue: '+7',
+        partnerPhoneError: '',
+        partnerInfoValue: '',
+        partnerInfoError: '',
+    }
+
+    handleClickOpenCatalog = () => {
+        console.log("OPEN ME")
+        this.setState({isOpenModalCatalog: true})
+        console.log(this.state.isOpenModalCatalog)
+    };
+
+    handleCancelOpenCatalog = () => {
+        console.log("CANCEL ME")
+        this.setState({isOpenModalCatalog: false})
+    };
+
+    handleClickOpenBecomePartner = () => {
+        console.log("OPEN ME")
+        this.setState({isOpenModalBecomePartner: true})
+        console.log(this.state.isOpenModalBecomePartner)
+    };
+
+    handleCancelOpenBecomePartner = () => {
+        console.log("CANCEL ME")
+        this.setState({isOpenModalBecomePartner: false})
+    };
+
 
     render() {
+        const {classes} = this.props;
         return (
             (<body className="body">
                 <header>
@@ -16,7 +83,8 @@ export default class LandingPage extends Component {
                         <div className="section">
                             <div className="top-header__info">
                                 <p className="top-header__info-text">Делись ссылками linkme.club и зарабатывай</p>
-                                <a className="top-header__info-button">Смотреть объявления</a>
+                                <a className="top-header__info-button" onClick={this.handleClickOpenCatalog}>Смотреть
+                                    объявления</a>
                             </div>
                         </div>
                     </div>
@@ -30,34 +98,34 @@ export default class LandingPage extends Component {
                                              className="bottom-header__img"/>
                                     </div>
 
-                                    <p className="bottom-header__logo-text">сервис распространения объявлений</p>
+                                    <p className="bottom-header__logo-text">cообщество благодарных предпринимателей</p>
                                 </a>
 
                                 <ul className="bottom-header__list">
 
-                                    <li className="bottom-header__item">
-                                        <a href="#" className="bottom-header__item-link">О проекте</a>
-                                    </li>
+                                    {/*<li className="bottom-header__item">*/}
+                                    {/*    <a href="#" className="bottom-header__item-link">О проекте</a>*/}
+                                    {/*</li>*/}
 
 
-                                    <li className="bottom-header__item">
-                                        <a href="#" className="bottom-header__item-link">Все объявления</a>
-                                    </li>
+                                    {/*<li className="bottom-header__item">*/}
+                                    {/*    <a href="#" className="bottom-header__item-link">Все объявления</a>*/}
+                                    {/*</li>*/}
 
 
-                                    <li className="bottom-header__item">
-                                        <a href="#" className="bottom-header__item-link">Помощь</a>
-                                    </li>
+                                    {/*<li className="bottom-header__item">*/}
+                                    {/*    <a href="#" className="bottom-header__item-link">Помощь</a>*/}
+                                    {/*</li>*/}
 
 
-                                    <li className="bottom-header__item">
-                                        <a href="#" className="bottom-header__item-link">Контакты</a>
-                                    </li>
+                                    {/*<li className="bottom-header__item">*/}
+                                    {/*    <a href="#" className="bottom-header__item-link">Контакты</a>*/}
+                                    {/*</li>*/}
 
 
                                     <li className="bottom-header__item bottom-header__last-item">
                                         <a href="#" className="bottom-header__item-link link-main">Заработай на
-                                            продаже объекта</a>
+                                            продажах</a>
                                     </li>
 
                                 </ul>
@@ -74,29 +142,28 @@ export default class LandingPage extends Component {
                     <nav className="mobile-nav">
                         <ul className="bottom-header__list">
 
-                            <li className="bottom-header__item">
-                                <a href="#" className="bottom-header__item-link">О проекте</a>
-                            </li>
+                            {/*<li className="bottom-header__item">*/}
+                            {/*    <a href="#" className="bottom-header__item-link">О проекте</a>*/}
+                            {/*</li>*/}
 
 
-                            <li className="bottom-header__item">
-                                <a href="#" className="bottom-header__item-link">Все объявления</a>
-                            </li>
+                            {/*<li className="bottom-header__item">*/}
+                            {/*    <a href="#" className="bottom-header__item-link">Все объявления</a>*/}
+                            {/*</li>*/}
 
 
-                            <li className="bottom-header__item">
-                                <a href="#" className="bottom-header__item-link">Помощь</a>
-                            </li>
+                            {/*<li className="bottom-header__item">*/}
+                            {/*    <a href="#" className="bottom-header__item-link">Помощь</a>*/}
+                            {/*</li>*/}
 
 
-                            <li className="bottom-header__item">
-                                <a href="#" className="bottom-header__item-link">Контакты</a>
-                            </li>
+                            {/*<li className="bottom-header__item">*/}
+                            {/*    <a href="#" className="bottom-header__item-link">Контакты</a>*/}
+                            {/*</li>*/}
 
 
                             <li className="bottom-header__item bottom-header__last-item">
-                                <a href="#" className="bottom-header__item-link link-main">Заработай на продаже
-                                    объекта</a>
+                                <a href="#" className="bottom-header__item-link link-main">Заработай на продажах</a>
                             </li>
 
                         </ul>
@@ -107,12 +174,13 @@ export default class LandingPage extends Component {
                     <section className="section earn">
                         <h1 className="earn__title">Зарабатывай!<br/>
                             Получай вознаграждение<br/>
-                            за продажу по твоей ссылке
+                            за продажи по твоим ссылкам
                             linkme.club
                         </h1>
-                        <p className="earn__desc">используй свои социальные сети, чтобы поделиться ссылкой</p>
+                        <p className="earn__desc">используй социальные сети и мессенджеры, чтобы поделиться ссылкой</p>
 
-                        <a href="#" className="link-main earn__link">Смотреть объявления</a>
+                        <a href="#" className="link-main earn__link" onClick={this.handleClickOpenCatalog}>Смотреть
+                            объявления</a>
 
                         <div className="earn__bg-img">
                             <img src={require("../../img/landing/first-screen.png")} alt="Фон"/>
@@ -218,7 +286,7 @@ export default class LandingPage extends Component {
                         <div className="section">
                             <h4 className="section__title">Стань участником</h4>
 
-                            <a href="#" className="member__link">Выбери любое из объявлений linkme.club и:</a>
+                            <p className="member__link">В любом объявлении linkme.club:</p>
 
                             <div className="member__wrap">
                                 <div className="member__item">
@@ -251,31 +319,100 @@ export default class LandingPage extends Component {
                         </div>
                     </section>
 
-                    <section className="section">
-                        <div className="like">
-                            <div className="like__wrap">
-                                <h4 className="section__title">Почему linkme.club любят</h4>
+                    {/*<section className="section">*/}
+                    {/*    <div className="like">*/}
+                    {/*        <div className="like__wrap">*/}
+                    {/*            <h4 className="section__title">Почему linkme.club любят</h4>*/}
 
-                                <img src={require("../../img/landing/like-bg.png")} alt="Почему нас любят"
-                                     className="like__img"/>
+                    {/*            <img src={require("../../img/landing/like-bg.png")} alt="Почему нас любят"*/}
+                    {/*                 className="like__img"/>*/}
 
-                                <p className="like__desc">Продавцы - это отиличный способ продавать с эффектом
-                                    сарафанного радио
-                                    и налетом дружелюбности.
-                                </p>
-                                <p className="like__desc">Продавцы - это отиличный способ продавать с эффектом
-                                    сарафанного радио
-                                    и налетом дружелюбности.
-                                </p>
-                                <p className="like__desc">Продавцы - это отиличный способ продавать с эффектом
-                                    сарафанного радио
-                                    и налетом дружелюбности.
-                                </p>
+                    {/*            <p className="like__desc">Продавцы - это отиличный способ продавать с эффектом*/}
+                    {/*                сарафанного радио*/}
+                    {/*                и налетом дружелюбности.*/}
+                    {/*            </p>*/}
+                    {/*            <p className="like__desc">Продавцы - это отиличный способ продавать с эффектом*/}
+                    {/*                сарафанного радио*/}
+                    {/*                и налетом дружелюбности.*/}
+                    {/*            </p>*/}
+                    {/*            <p className="like__desc">Продавцы - это отиличный способ продавать с эффектом*/}
+                    {/*                сарафанного радио*/}
+                    {/*                и налетом дружелюбности.*/}
+                    {/*            </p>*/}
 
-                                <a href="#feedback" data-fancybox="feedback" className="like__button link-main">Связаться
-                                    с нами</a>
+                    {/*            <a href="#feedback" data-fancybox="feedback" className="like__button link-main">Связаться*/}
+                    {/*                с нами</a>*/}
+                    {/*        </div>*/}
+                    {/*    </div>*/}
+                    {/*</section>*/}
+
+                    <section className="section announce">
+                        <h4 className="section__title">Выбери объявления и заработай</h4>
+                        <div className="announce__items">
+                            <div className="announce__item">
+                                <div className="announce__img-wrap">
+                                    <p className="announce__img-desc">Поделись ссылкой и заработай на этом
+                                        <span className="announce__img-price">500 000 </span>
+                                    </p>
+
+                                    <img src={require("../../img/landing/announce-item.png")} alt="Картинка объявления"
+                                         className="announce__img"/>
+
+                                </div>
+
+                                <div className="announce__info">
+                                    <p className="announce__name">Продажа квартиры
+                                        в историческом районе
+                                    </p>
+
+                                    <p className="announce__desc">Концептуальный и эксклюзивный проект,
+                                        свободный от условностей. Этот дом
+                                        цепляет и внешним видом
+                                    </p>
+
+                                    <p className="announce__price">105 000 000 </p>
+
+                                    <p className="announce__price-desc">Возможна покупка в ипотеку</p>
+
+                                    <a href="#" className="announce__button link-main">Перейти к объявлению</a>
+                                </div>
                             </div>
+
+
+                            <div className="announce__item">
+                                <div className="announce__img-wrap">
+                                    <p className="announce__img-desc">Поделись ссылкой и заработай на этом
+                                        <span className="announce__img-price">500 000 </span>
+                                    </p>
+
+                                    <img src={require("../../img/landing/announce-item.png")} alt="Картинка объявления"
+                                         className="announce__img"/>
+
+                                </div>
+
+                                <div className="announce__info">
+                                    <p className="announce__name">Продажа квартиры
+                                        в историческом районе
+                                    </p>
+
+                                    <p className="announce__desc">Концептуальный и эксклюзивный проект,
+                                        свободный от условностей. Этот дом
+                                        цепляет и внешним видом
+                                    </p>
+
+                                    <p className="announce__price">105 000 000 </p>
+
+                                    <p className="announce__price-desc">Возможна покупка в ипотеку</p>
+
+                                    <a href="#" className="announce__button link-main">Перейти к объявлению</a>
+                                </div>
+                            </div>
+
                         </div>
+
+                        <a className="announce__button-more link-main" onClick={this.handleClickOpenCatalog}>Смотреть
+                            больше объявлений</a>
+
                     </section>
 
                     <section className="partners section">
@@ -288,93 +425,24 @@ export default class LandingPage extends Component {
                                          className="partners__img"/>
                                 </div>
                             </div>
-                            <div className="partners__item">
-                                <div className="partners__img-wrap">
-                                    <img src={require("../../img/landing/partner-item.png")} alt="Партнер"
-                                         className="partners__img"/>
-                                </div>
-                            </div>
-                            <div className="partners__item">
-                                <div className="partners__img-wrap">
-                                    <img src={require("../../img/landing/partner-item.png")} alt="Партнер"
-                                         className="partners__img"/>
-                                </div>
-                            </div>
+                            {/*<div className="partners__item">*/}
+                            {/*    <div className="partners__img-wrap">*/}
+                            {/*        <img src={require("../../img/landing/partner-item.png")} alt="Партнер"*/}
+                            {/*             className="partners__img"/>*/}
+                            {/*    </div>*/}
+                            {/*</div>*/}
+                            {/*<div className="partners__item">*/}
+                            {/*    <div className="partners__img-wrap">*/}
+                            {/*        <img src={require("../../img/landing/partner-item.png")} alt="Партнер"*/}
+                            {/*             className="partners__img"/>*/}
+                            {/*    </div>*/}
+                            {/*</div>*/}
                         </div>
 
-                        <a href="#be-partner" data-fancybox="be-partner" className="partners__button link-main">Стать
-                            партнером</a>
+                        <a href="#be-partner" data-fancybox="be-partner" className="partners__button link-main"
+                           onClick={this.handleClickOpenBecomePartner}>Стать партнером</a>
                     </section>
 
-                    <section className="section announce">
-                        <h4 className="section__title">Объявления, на которых Вы можете заработать</h4>
-
-                        <div className="announce__items">
-
-                            <div className="announce__item">
-                                <div className="announce__img-wrap">
-                                    <p className="announce__img-desc">Поделись ссылкой и заработай на этом
-                                        <span className="announce__img-price">500 000 </span>
-                                    </p>
-
-                                    <img src={require("../../img/landing/announce-item.png")} alt="Картинка объявления"
-                                         className="announce__img"/>
-
-                                </div>
-
-                                <div className="announce__info">
-                                    <p className="announce__name">Продажа квартиры
-                                        в историческом районе
-                                    </p>
-
-                                    <p className="announce__desc">Концептуальный и эксклюзивный проект,
-                                        свободный от условностей. Этот дом
-                                        цепляет и внешним видом
-                                    </p>
-
-                                    <p className="announce__price">105 000 000 </p>
-
-                                    <p className="announce__price-desc">Возможна покупка в ипотеку</p>
-
-                                    <a href="#" className="announce__button link-main">Перейти к объявлению</a>
-                                </div>
-                            </div>
-
-
-                            <div className="announce__item">
-                                <div className="announce__img-wrap">
-                                    <p className="announce__img-desc">Поделись ссылкой и заработай на этом
-                                        <span className="announce__img-price">500 000 </span>
-                                    </p>
-
-                                    <img src={require("../../img/landing/announce-item.png")} alt="Картинка объявления"
-                                         className="announce__img"/>
-
-                                </div>
-
-                                <div className="announce__info">
-                                    <p className="announce__name">Продажа квартиры
-                                        в историческом районе
-                                    </p>
-
-                                    <p className="announce__desc">Концептуальный и эксклюзивный проект,
-                                        свободный от условностей. Этот дом
-                                        цепляет и внешним видом
-                                    </p>
-
-                                    <p className="announce__price">105 000 000 </p>
-
-                                    <p className="announce__price-desc">Возможна покупка в ипотеку</p>
-
-                                    <a href="#" className="announce__button link-main">Перейти к объявлению</a>
-                                </div>
-                            </div>
-
-                        </div>
-
-                        <a href="#" className="announce__button-more link-main">Смотреть больше объявлений</a>
-
-                    </section>
 
                     <div className="be-partner" id="be-partner">
                         <div className="be-partner__wrap">
@@ -394,6 +462,7 @@ export default class LandingPage extends Component {
                                                name="modal-name"
                                                id="modal-name"/>
                                     </div>
+
                                 </div>
 
                                 <div className="be-partner__item-wrap be-partner__item-numb">
@@ -484,70 +553,188 @@ export default class LandingPage extends Component {
                                             alt="Логотип сайта"
                                             className="footer__img"/>
                                         </div>
-                                        <p className="footer__service">Сервис распространения объявлений</p>
+                                        <p className="footer__service">Сообщество благодарных предпринимателей</p>
                                     </a>
 
                                     <p className="footer__paragraph footer__copyright">
-                                        Logo © Copyright 2020
+                                        LinkMe.club © Copyright 2020
                                     </p>
                                 </div>
 
                                 <div className="footer__colum">
 
                                     <ul className="footer__list">
-                                        <li className="footer__item-list"><a href="" className="footer__item-link">О
-                                            проекте</a></li>
-                                        <li className="footer__item-list"><a href="" className="footer__item-link">Все
-                                            объявления</a></li>
-                                        <li className="footer__item-list"><a href=""
-                                                                             className="footer__item-link">Помощь</a>
-                                        </li>
-                                        <li className="footer__item-list"><a href=""
-                                                                             className="footer__item-link">Контакты</a>
-                                        </li>
+                                        {/*<li className="footer__item-list"><a href="" className="footer__item-link">О*/}
+                                        {/*    проекте</a></li>*/}
+                                        {/*<li className="footer__item-list"><a href="" className="footer__item-link">Все*/}
+                                        {/*    объявления</a></li>*/}
+                                        {/*<li className="footer__item-list"><a href=""*/}
+                                        {/*                                     className="footer__item-link">Помощь</a>*/}
+                                        {/*</li>*/}
+                                        {/*<li className="footer__item-list"><a href=""*/}
+                                        {/*                                     className="footer__item-link">Контакты</a>*/}
+                                        {/*</li>*/}
                                     </ul>
-
                                 </div>
-
                             </div>
 
                             <div className="footer__two-colums">
-
                                 <div className="footer__colum footer__political">
-
                                     <div className="footer__socials">
-                                        <a href="#" className="footer__social">
-                                            <img src={require("../../img/landing/social-telegram.png")}
-                                                 alt="Иконка телеграмма"
+                                        {/*<a href="#" className="footer__social">*/}
+                                        {/*    <img src={require("../../img/landing/social-telegram.png")}*/}
+                                        {/*         alt="Иконка телеграмма"*/}
+                                        {/*         className="footer__social-img"/>*/}
+                                        {/*</a>*/}
+                                        <a href="https://vk.com/linkme.club" className="footer__social">
+                                            <img src={require("../../img/vk-color.png")}
+                                                 alt="Иконка vk"
                                                  className="footer__social-img"/>
                                         </a>
-                                        <a href="#" className="footer__social">
-                                            <img src={require("../../img/landing/social-inst.png")}
-                                                 alt="Иконка телеграмма"
-                                                 className="footer__social-img"/>
-                                        </a>
-                                        <a href="#" className="footer__social">
+                                        <a href="https://www.facebook.com/groups/2637764899771970"
+                                           className="footer__social">
                                             <img src={require("../../img/landing/social-facebook.png")}
-                                                 alt="Иконка телеграмма"
+                                                 alt="Иконка fb"
                                                  className="footer__social-img"/>
                                         </a>
                                     </div>
 
-                                    <a href="#" className="footer__political">Политика конфиденциальности</a>
+                                    {/*<a href="#" className="footer__political">Политика конфиденциальности</a>*/}
 
                                 </div>
 
-                                <div className="footer__colum footer__last">
-                                    <a href="#" className="footer__quest">Задать вопрос</a>
+                                {/*<div className="footer__colum footer__last">*/}
+                                {/*    <a href="#" className="footer__quest">Задать вопрос</a>*/}
 
-                                    <a className="footer__link-mail"
-                                       href="mailto:info@site-project.ru">info@site-project.ru</a>
+                                {/*    <a className="footer__link-mail"*/}
+                                {/*       href="mailto:info@site-project.ru">linkme@gmail.com</a>*/}
 
-                                    <a href="#" className="footer__circs">Условия использования</a>
-                                </div>
+                                {/*    <a href="#" className="footer__circs">Условия использования</a>*/}
+                                {/*</div>*/}
 
                             </div>
                         </div>
+                    </div>
+                    <div>
+                        <Dialog open={this.state.isOpenModalCatalog} onClose={this.handleCancelOpenCatalog}
+                                aria-labelledby="form-dialog-title">
+                            <DialogTitle id="form-dialog-title">Список всех объявлений
+
+                            </DialogTitle>
+                            <IconButton aria-label="close" className={classes.closeButton}
+                                        onClick={this.handleCancelOpenCatalog}>
+                                <CloseIcon/>
+                            </IconButton>
+                            <DialogContent>
+                                <DialogContentText>
+                                    Каталог в разработке.
+                                    <br/>
+                                    <a>Весь список объявлений смотрите в наших группах </a>
+                                    <a href={"https://vk.com/linkme.club"}><u>ВК</u></a>
+                                    <a> и </a>
+                                    <a href={"https://www.facebook.com/groups/2637764899771970"}><u>ФБ</u></a>
+                                </DialogContentText>
+
+                            </DialogContent>
+                            <DialogActions>
+                                <Button onClick={this.handleCancelOpenCatalog} color="primary">
+                                    OK
+                                </Button>
+                                {/*<Button onClick={this.handleSend} color="blue" variant="outlined"*/}
+                                {/*        className={classes.root}>*/}
+                                {/*    Отправить*/}
+                                {/*</Button>*/}
+                            </DialogActions>
+                        </Dialog>
+                        <Snackbar open={this.state.snackOpen}
+                                  autoHideDuration={3500}
+                                  onClose={this._handleSnackClose}
+                                  anchorOrigin={{
+                                      "horizontal": "center",
+                                      "vertical": "top",
+                                  }}
+                        >
+
+                        </Snackbar>
+                    </div>
+
+                    <div>
+                        <Dialog open={this.state.isOpenModalBecomePartner} onClose={this.handleCancelOpenBecomePartner}
+                                aria-labelledby="form-dialog-title">
+                            <DialogTitle id="form-dialog-title">Стать Партнером
+
+                            </DialogTitle>
+                            <IconButton aria-label="close" className={classes.closeButton}
+                                        onClick={this.handleCancelOpenBecomePartner}>
+                                <CloseIcon/>
+                            </IconButton>
+                            <DialogContent>
+                                <TextField
+                                    className={classes.partnerName}
+                                    autoFocus
+                                    margin="dense"
+                                    id="partnerName"
+                                    label="Как Вас зовут?"
+                                    type="text"
+                                    fullWidth
+                                    required
+                                    error={this.state.partnerNameError}
+                                    value={this.state.partnerNameValue}
+                                    onChange={this._handlePartnerNameChange}
+                                />
+                                <InputMask mask="+9 999 999 99 99"
+                                           maskChar=" "
+                                           value={this.state.partnerPhoneValue}
+                                           onChange={this._handlePartnerPhoneChange}>
+                                    <TextField
+                                        autoFocus
+                                        margin="dense"
+                                        id="partnerPhone"
+                                        label="Номер для связи"
+                                        type="text"
+                                        fullWidth
+                                        required
+                                        error={this.state.partnerPhoneError}
+                                    >
+                                    </TextField>
+                                </InputMask>
+                                <TextField
+                                    className={classes.partnerInfo}
+                                    autoFocus
+                                    margin="dense"
+                                    id="partnerInfo"
+                                    label="Дополнительно"
+                                    type="text"
+                                    fullWidth
+                                    required
+                                    error={this.state.partnerInfoError}
+                                    value={this.state.partnerInfoValue}
+                                    onChange={this._handlePartnerInfoChange}
+                                />
+                            </DialogContent>
+                            <DialogActions>
+                                {/*<Button onClick={this.handleCancel} color="primary">*/}
+                                {/*    Отмена*/}
+                                {/*</Button>*/}
+                                {/*todo добавить обработку на бэк с отравкой email о новом партнере*/}
+                                <Button onClick={this.handleSend} color="blue" variant="outlined"
+                                        className={classes.root}>
+                                    Отправить
+                                </Button>
+                            </DialogActions>
+                        </Dialog>
+                        <Snackbar open={this.state.snackOpen}
+                                  autoHideDuration={3500}
+                                  onClose={this._handleSnackClose}
+                                  anchorOrigin={{
+                                      "horizontal": "center",
+                                      "vertical": "top",
+                                  }}
+                        >
+                            <Alert onClose={this._handleSnackClose} severity="success">
+                                Спасибо! Заявка отправлена.
+                            </Alert>
+                        </Snackbar>
                     </div>
                 </footer>
 
@@ -560,4 +747,79 @@ export default class LandingPage extends Component {
             )
         )
     }
+
+
+    _handlePartnerNameChange = (e) => {
+        this.setState({
+            partnerNameValue: e.target.value
+        });
+    }
+
+
+    _handlePartnerInfoChange = (e) => {
+        this.setState({
+            partnerInfoValue: e.target.value
+        });
+    }
+
+    _handlePartnerPhoneChange = (e) => {
+        this.setState({
+            partnerPhoneValue: e.target.value
+        });
+    }
+
+    handleSend = () => {
+        console.log("SEND ME")
+        console.log("ClientName Value:")
+        console.log(this.state.partnerNameValue)
+        console.log(this.state.partnerPhoneValue)
+
+        if (this.state.partnerNameValue && this.state.partnerPhoneValue) {
+            let phone = this.state.partnerPhoneValue
+                .replace('+', '')
+                .replace('(', '')
+                .replace(')', '')
+                .split(' ').join('')
+                .split('_').join('')
+
+            if (phone.length === 11) {
+                console.log("MATCH")
+                this.setState({partnerPhoneError: ''})
+                this.setState({partnerNameError: ''})
+
+                //отправить данные на сервер:
+                //todo переделать с localStorage!!!
+                axios.post(HOST + '/newPartner',
+                    {
+                        name: this.state.partnerNameValue,
+                        phone: this.state.clientPhoneValue,
+                    })
+                this.setState({isOpenModalBecomePartner: false})
+                this.setState({snackOpen: true});
+            } else {
+                this.setState({partnerPhoneError: 'Введите полный номер телефона'})
+            }
+            //провалидировать номер телефона
+        } else {
+            if (!this.state.partnerNameValue) {
+                this.setState({partnerNameError: 'Введите имя'})
+            }
+            if (!this.state.partnerPhoneValue) {
+                this.setState({partnerPhoneError: 'Введите номер телефона'})
+            }
+        }
+    }
+
+    _handleSnackClose = () => {
+        this.setState({
+            snackOpen: false
+        });
+    }
+
 }
+
+LandingPage.propTypes = {
+    classes: PropTypes.object.isRequired,
+};
+
+export default withStyles(styles)(LandingPage);

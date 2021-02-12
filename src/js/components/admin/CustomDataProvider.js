@@ -85,6 +85,7 @@ export default (apiUrl, httpClient = fetchUtils.fetchJson) => {
                 let slider1BlobList;
                 let slider2BlobList;
                 let brokerPhotoBlob;
+                let shareImageBlob;
                 if (params.data.headPhoto) {
                     headPhotoBlob = await urlSrcToBase64(params.data.headPhoto.src)
                 }
@@ -97,6 +98,9 @@ export default (apiUrl, httpClient = fetchUtils.fetchJson) => {
                 if (params.data.brokerPhoto) {
                     brokerPhotoBlob = await urlSrcToBase64(params.data.brokerPhoto.src)
                 }
+                if (params.data.shareImage) {
+                    shareImageBlob = await urlSrcToBase64(params.data.shareImage.src)
+                }
 
                 let data = {
                     url: params.data.url,
@@ -104,6 +108,7 @@ export default (apiUrl, httpClient = fetchUtils.fetchJson) => {
                     slider1: slider1BlobList,
                     slider2: slider2BlobList,
                     brokerPhoto: brokerPhotoBlob,
+                    shareImage: shareImageBlob,
                     advContent: params.data.advContent
                 }
                 console.log(data)
@@ -137,6 +142,7 @@ export default (apiUrl, httpClient = fetchUtils.fetchJson) => {
         let slider1BlobList;
         let slider2BlobList;
         let brokerPhotoBlob;
+        let shareImageBlob;
         if (params.data.headPhoto) {
             headPhotoBlob = await urlSrcToBase64(params.data.headPhoto.src)
         }
@@ -149,6 +155,9 @@ export default (apiUrl, httpClient = fetchUtils.fetchJson) => {
         if (params.data.brokerPhoto) {
             brokerPhotoBlob = await urlSrcToBase64(params.data.brokerPhoto.src)
         }
+        if (params.data.shareImage) {
+            shareImageBlob = await urlSrcToBase64(params.data.shareImage.src)
+        }
 
         let data = {
             url: params.data.url,
@@ -156,6 +165,7 @@ export default (apiUrl, httpClient = fetchUtils.fetchJson) => {
             slider1: slider1BlobList,
             slider2: slider2BlobList,
             brokerPhoto: brokerPhotoBlob,
+            shareImage: shareImageBlob,
             advContent: params.data.advContent
         }
         return data;

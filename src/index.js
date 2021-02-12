@@ -12,6 +12,7 @@ import VKRedirect from "./js/components/VKRedirect";
 import ManagerPage from "./js/components/ManagerPage";
 import AdminPage from "./js/components/admin/AdminPage";
 import FBRedirect from "./js/components/FBRedirect";
+import PrivacyPage from "./js/components/PrivacyPage";
 
 var hist = createBrowserHistory();
 
@@ -34,6 +35,7 @@ if (parsedData.length >= 3) {
     && !path.includes("login")
     && !path.includes("managerPage")
     && !path.includes("adminPage")
+    && !path.includes("privacy")
     && !path.includes("test")
 ) {
     console.log("path: " + path);
@@ -51,6 +53,7 @@ if (parsedData.length >= 3) {
                 {/*<Route path="/profile-page" component={ProfilePage} />*/}
                 <Route path="/vkredirect" component={VKRedirect}/>
                 <Route path="/fbredirect" component={FBRedirect}/>
+                <Route path="/privacy" component={PrivacyPage}/>
                 <Route path="/" component={LandingPage}/>
             </Switch>
         </Router>

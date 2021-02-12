@@ -31,6 +31,21 @@ export function postRender() {
     });
 
 
+    function processButtonlink(guestMain, menuSlideDown, menuSlideUp) {
+        return function () {
+            let buttonLink = document.querySelector('.about-link__border')
+            console.log("---buttonLink top:" + guestMain.style.top)
+
+            if (guestMain.style.top === 0 || guestMain.style.top === '0px') {
+                // if (guestSecond.style.top === 0 || guestSecond.style.top === '0px') {
+                menuSlideDown()
+            } else {
+                menuSlideUp()
+            }
+            // buttonLink.addEventListener('click', processButtonlink(guestMain, menuSlideDown, menuSlideUp))
+        };
+    }
+
     if (document.querySelector('.header')) {
         let headerMain = document.querySelector('.header')
         let guestMain = document.querySelector('.main-header')
@@ -49,9 +64,13 @@ export function postRender() {
         // }, 3000);
 
         let menuSlideDown = function () {
+            console.log("menuSlideDown!")
+            console.log("guestSecond.scrollHeight:" + guestSecond.scrollHeight)
             guestMain.style.top = guestSecond.scrollHeight + 'px'
             guestSecond.style.top = 0 + 'px'
             if (document.querySelector('.header.user')) {
+                console.log("++++.header.user:")
+
                 if (window.innerWidth <= 992 && window.innerWidth > 576) {
                     man.style.top = '-62px'
                 } else if (window.innerWidth <= 576) {
@@ -66,18 +85,21 @@ export function postRender() {
             }
 
             if (document.querySelector('.header.guest')) {
-                if (window.innerWidth <= 576) {
-                    mainHeader.classList.add('active-guest')
-                    // hamburgerGuest.style.top = `-${guestSecond.scrollHeight}px`
-                    // hamburgerGuest.classList.add('is-active')
-                }
+                // if (window.innerWidth <= 576) {
+                // mainHeader.classList.add('active-guest')
+                // hamburgerGuest.style.top = `-${guestSecond.scrollHeight}px`
+                // hamburgerGuest.classList.add('is-active')
+                // }
             }
         }
 
         let menuSlideUp = function () {
+            console.log("menuSlideUp!")
+            console.log("guestSecond.scrollHeight:" + guestSecond.scrollHeight)
             guestMain.style.top = 0 + 'px'
             guestSecond.style.top = '-' + guestSecond.scrollHeight + 'px'
             if (document.querySelector('.header.user')) {
+                console.log("++++.header.user:")
                 if (window.innerWidth <= 992) {
                     man.style.top = '-' + guestSecond.scrollHeight + 'px'
                 }
@@ -89,29 +111,28 @@ export function postRender() {
                 }
             }
             if (document.querySelector('.header.guest')) {
-                if (window.innerWidth <= 576) {
-                    mainHeader.classList.remove('active-guest')
-                    // hamburgerGuest.style.top = 0 + 'px'
-                    // hamburgerGuest.classList.remove('is-active')
-                }
+                // if (window.innerWidth <= 576) {
+                // mainHeader.classList.remove('active-guest')
+                // hamburgerGuest.style.top = 0 + 'px'
+                // hamburgerGuest.classList.remove('is-active')
+                // }
             }
         }
 
         headerMain.addEventListener('mouseenter', function () {
+            console.log("mouseenter:" + guestMain.style.top)
             menuSlideDown()
         })
 
         headerMain.addEventListener('mouseleave', function () {
+            console.log("mouseleave:" + guestMain.style.top)
             menuSlideUp()
         })
 
-        buttonLink.addEventListener('click', function () {
-            if (guestMain.style.top == 0 || guestMain.style.top == '0px') {
-                menuSlideDown()
-            } else {
-                menuSlideUp()
-            }
-        })
+        buttonLink.addEventListener('click', processButtonlink(guestMain, menuSlideDown, menuSlideUp))
+
+
+
         if (document.querySelector('.header.guest')) {
             // hamburgerGuest.addEventListener('click', function () {
             //     guestSecond.style.top == '0px' ? menuSlideUp() : menuSlideDown()
@@ -122,6 +143,7 @@ export function postRender() {
             //     guestSecond.style.top == '0px' ? menuSlideUp() : menuSlideDown()
             // })
 
+            console.log("querySelector('.header.user')")
             var copysiteBtn = document.querySelector('.user-hover__copy')
             copysiteBtn.addEventListener('click', function (event) {
                 var siteLink = document.querySelector('.header__site-link')

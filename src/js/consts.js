@@ -1,14 +1,17 @@
+
+export const PROTOCOL = "https://";
+
 //dev configuration
-// export const PROTOCOL = "https://";
+// export const WEB_URL_API = "localhost:5000";
+// export const API_PROTOCOL = "http://";
 // export const WEB_URL = "linkme.clud";
-export const WEB_URL_API = "localhost:5000";
-export const API_PROTOCOL = "http://";
 
 //prod configuration
-// export const WEB_URL_API = "linkme.club";
-// export const API_PROTOCOL = "https://";
+export const WEB_URL_API = "linkme.club";
+export const API_PROTOCOL = "https://";
 export const WEB_URL = "linkme.club";
-export const PROTOCOL = "https://";
+//todo убрать
+export const WEB_URL1 = "linkme.club";
 
 
 export const HOST_BASE = PROTOCOL + WEB_URL;
@@ -20,13 +23,17 @@ export const host_repost = HOST + "/repost";
 export const host_images = host_adv + "/image";
 export const host_manager = HOST + "/manager";
 export const host_clientResponse = HOST + "/clientResponse";
+
 export const state_param = "test";
 
 export const FACEBOOK_APP_ID = "1528995760605364"
 export const APP_SECRET = "68972d771304db75934cf0a052e74712"
+// export const FACEBOOK_APP_ID = "603055209739468"
+// export const APP_SECRET = "c753b787bd499f4740d435b2906fb97e"
+
 export const FACEBOOK_AUTH_URL = "https://www.facebook.com/v8.0/dialog/oauth?" +
     `client_id=${FACEBOOK_APP_ID}` +
-    `&redirect_uri=https://${WEB_URL}/fbredirect` +
+    `&redirect_uri=https://${WEB_URL1}/fbredirect` +
     `&state=${state_param}`
 
 export const VK_AUTH_URL = "https://oauth.vk.com/authorize" +

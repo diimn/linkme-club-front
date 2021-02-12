@@ -56,6 +56,7 @@ export default class FBRedirect extends Component {
                 console.log(resId.data)
                 //получаем ссылку на картинку и сохраняем в бд
                 //отправляем пользователя на бэк
+                // todo найти верную ссылку
                 let userUrl = host_user + '/save' +
                     '?socialId=' + resId.data.id +
                     '&socialType=' + 'FB' +

@@ -256,16 +256,19 @@ class App extends Component {
                     this.setState({content: res.data})
                     this.setState({isLoading: false})
 
-                    let crdnts = res.data.coordinates.split(",").map(value => parseFloat(value))
-                    this.setState({coordinates: [crdnts]})
+                    if (res.data.coordinates) {
+                        let crdnts = res.data.coordinates.split(",").map(value => parseFloat(value))
+                        this.setState({coordinates: [crdnts]})
 
-                    let mapData = {
-                        center: crdnts,
-                        zoom: 15,
-                    };
-                    this.setState({mapData: mapData})
-                    console.log("1111")
-                    console.log(this.state.coordinates)
+                        let mapData = {
+                            center: crdnts,
+                            zoom: 15,
+                        };
+                        this.setState({mapData: mapData})
+                        console.log("1111")
+                        console.log(this.state.coordinates)
+                    }
+
                 }).catch(reason => {
                 console.log("Unknown object")
             });
@@ -287,6 +290,7 @@ class App extends Component {
 
     render() {
         console.log("RENDER---------------")
+        console.log("Coordinates: " + this.state.coordinates)
         const {classes} = this.props;
         if (this.state.isLoading === false) {
             return (
@@ -297,7 +301,10 @@ class App extends Component {
                             {property: 'og:url', content: 'https://LinkMe.club'},
                             {property: 'og:title', content: 'LinkMe.club'},
                             {property: 'og:description', content: "TEST_TEST"},
-                            {property: 'og:image', content: "http://static01.nyt.com/images/2015/02/19/arts/international/19iht-btnumbers19A/19iht-btnumbers19A-facebookJumbo-v2.jpg"},
+                            {
+                                property: 'og:image',
+                                content: "http://static01.nyt.com/images/2015/02/19/arts/international/19iht-btnumbers19A/19iht-btnumbers19A-facebookJumbo-v2.jpg"
+                            },
                             // Any other meta tags go here as objects or you can just add children directly inside this component.
                         ]}/>
                     <div className="App">
@@ -408,15 +415,14 @@ class App extends Component {
                                        className="about-link__link">Описание</a>
                                 </li>
                                 <li className="about-link__item">
-                                    <a href="#" onClick={this.focusToAboutElement} className="about-link__link">О
-                                        комплексе</a>
+                                    <a href="#" onClick={this.focusToAboutElement} className="about-link__link">Инфо</a>
                                 </li>
                                 <li className="about-link__item">
                                     <a href="#" onClick={this.focusToCoordinatesElement}
                                        className="about-link__link">Местоположение</a>
                                 </li>
                                 <li className="about-link__item about-link__border">
-                                    <a className="about-link__link">Заработай на продаже объекта</a>
+                                    <a className="about-link__link">Заработай на этом!</a>
                                 </li>
                             </ul>
                         </section>
@@ -492,7 +498,7 @@ class App extends Component {
                             </div>
                         </section>
                         <section ref={this.aboutRef} className="about-comp">
-                            <h2 className="section__title">О комплексе</h2>
+                            <h2 className="section__title">Описание</h2>
                             <div className="swiper-container about-comp-swiper">
                                 {slider(this.state.numbersSlider.slider2Count, this.state.url)}
                                 <div className="swiper-button-prev about-comp-prev"/>
@@ -502,14 +508,19 @@ class App extends Component {
                                 {bulletFormatter(this.state.content.bullets)}
                             </ul>
                         </section>
-                        <section className="location">
-                            <div ref={this.coordinatesRef} className="section__title">Расположение</div>
-                            <YMaps style={styles1.YMaps}>
-                                <Map defaultState={this.state.mapData} className="location__map-wrap">
-                                    {this.state.coordinates.map(coordinate => <Placemark geometry={coordinate}/>)}
-                                </Map>
-                            </YMaps>
-                        </section>
+                        {/*-------------------------------------------*/}
+                        {(this.state.coordinates && this.state.coordinates.length > 0)
+                            ?
+                            <section className="location">
+                                <div ref={this.coordinatesRef} className="section__title">Расположение</div>
+                                <YMaps style={styles1.YMaps}>
+                                    <Map defaultState={this.state.mapData} className="location__map-wrap">
+                                        {this.state.coordinates.map(coordinate => <Placemark geometry={coordinate}/>)}
+                                    </Map>
+                                </YMaps>
+                            </section>
+                            : <div/>}
+
                         <footer className="section footer">
                             <div className="footer__wrap">
                                 <div className="footer__two-colums">
@@ -519,54 +530,49 @@ class App extends Component {
                                                 src={require('./img/landing/logo.png')}
                                                 alt="Логотип сайта"
                                                 className="footer__img"/></div>
-                                            <p className="footer__service">Сервис распространения объявлений</p>
+                                            <p className="footer__service">Сообщество благодарных предпринимателей</p>
                                         </a>
                                         <p className="footer__paragraph footer__copyright">
-                                            LinkMe Club © Copyright 2020
+                                            LinkMe.club © Copyright 2020
                                         </p>
                                     </div>
                                     <div className="footer__colum">
                                         <ul className="footer__list">
                                             <li className="footer__item-list">
-                                                <a href="" className="footer__item-link">О проекте</a>
+                                                <a href="https://linkme.club" className="footer__item-link">О проекте</a>
                                             </li>
-                                            <li className="footer__item-list">
-                                                <a href="" className="footer__item-link">Все объявления</a>
-                                            </li>
-                                            <li className="footer__item-list">
-                                                <a href="" className="footer__item-link">Помощь</a>
-                                            </li>
-                                            <li className="footer__item-list">
-                                                <a href="" className="footer__item-link">Контакты</a>
-                                            </li>
+                                            {/*<li className="footer__item-list">*/}
+                                            {/*    <a href="" className="footer__item-link">Все объявления</a>*/}
+                                            {/*</li>*/}
+                                            {/*<li className="footer__item-list">*/}
+                                            {/*    <a href="" className="footer__item-link">Помощь</a>*/}
+                                            {/*</li>*/}
+                                            {/*<li className="footer__item-list">*/}
+                                            {/*    <a href="" className="footer__item-link">Контакты</a>*/}
+                                            {/*</li>*/}
                                         </ul>
                                     </div>
                                 </div>
                                 <div className="footer__two-colums">
                                     <div className="footer__colum footer__political">
-                                        <div className="footer__socials">
-                                            <a href="#" className="footer__social">
-                                                <img src={require("./img/social-telegram.png")}
-                                                     alt="Иконка телеграмма"
+                                        <div className="footer__socials">        <a href="https://vk.com/linkme.club" className="footer__social">
+                                            <img src={require("./img/vk-color.png")}
+                                                 alt="Иконка vk"
+                                                 className="footer__social-img"/>
+                                        </a>
+                                            <a href="https://www.facebook.com/groups/2637764899771970" className="footer__social">
+                                                <img src={require("./img/landing/social-facebook.png")}
+                                                     alt="Иконка fb"
                                                      className="footer__social-img"/>
-                                            </a>
-                                            <a href="#" className="footer__social">
-                                                <img src={require("./img/social-inst.png")} alt="Иконка ins"
-                                                     className="footer__social-img"/>
-                                            </a>
-                                            <a href="#" className="footer__social">
-                                                <img src={require("./img/social-facebook.png")} alt="Иконка fb"
-                                                     className="footer__social-img"/>
-                                            </a>
-                                        </div>
-                                        <a href="#" className="footer__political">Политика конфиденциальности</a>
+                                            </a></div>
+                                        {/*<a href="#" className="footer__political">Политика конфиденциальности</a>*/}
                                     </div>
-                                    <div className="footer__colum footer__last">
-                                        <a href="#" className="footer__quest">Задать вопрос</a>
-                                        <a className="footer__link-mail"
-                                           href="mailto:info@site-project.ru">info@linkme.club</a>
-                                        <a href="#" className="footer__circs">Условия использования</a>
-                                    </div>
+                                    {/*<div className="footer__colum footer__last">*/}
+                                    {/*    <a href="https://www.linkme.club" className="footer__quest">Задать вопрос</a>*/}
+                                    {/*    <a className="footer__link-mail"*/}
+                                    {/*       href="mailto:info@site-project.ru">info@linkme.club</a>*/}
+                                    {/*    /!*<a href="#" className="footer__circs">Условия использования</a>*!/*/}
+                                    {/*</div>*/}
                                 </div>
                             </div>
                         </footer>
@@ -628,7 +634,7 @@ function slider(count, url) {
         items.push(<div className="swiper-slide">
             <div className="photo-obj__img-wrap">
                 <img src={addr}
-                     alt="Фото комплекса"
+                     alt="Фото"
                      className="photo-obj__img"/>
             </div>
         </div>)
@@ -655,7 +661,7 @@ function sliderTop(count, url, slider1_comments) {
             <div className="swiper-slide photo-obj__slide">
                 <div className="photo-obj__img-wrap">
                     <img src={addr}
-                         alt="Фото комплекса"
+                         alt="Фото"
                          className="photo-obj__img"/>
                 </div>
                 {commentsArray && commentsArray[i] && commentsArray[i].trim() !== '' &&

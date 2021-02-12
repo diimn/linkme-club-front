@@ -134,7 +134,7 @@ function redactor(val) {
             <TextInput source="advContent.slider1_comments" label="Комментарии к слайдеру 1" fullWidth={true}/>
             <TextInput source="advContent.price_comment" label="Комментарий к цене" fullWidth={true}/>
             <TextInput source="advContent.descHead" label="Комментарий к заголовку" fullWidth={true}/>
-            <TextInput multiline source="advContent.description" label="Описание "fullWidth={true}/>
+            <TextInput multiline source="advContent.description" label="Описание " fullWidth={true}/>
             <ImageInput source="slider2" label="Загрузка изображений слайдера 2" accept="image/*"
                         multiple="true"
                         labelMultiple="Перетащите фотографии или выберите для загрузки">
@@ -155,6 +155,15 @@ function redactor(val) {
             {/*<TextInput multiline source="body" />*/}
             {/*<TextInput label="Publication date" source="published_at" />*/}
             {/*<TextInput source="average_note" />*/}
+
+            <ImageInput source="shareImage"
+                        label="Загрузка изображений для репоста"
+                        accept="image/*"
+                        labelSingle="Перетащите фотографию или выберите для загрузки"
+            >
+                <ImageField source="src" title="title"/>
+            </ImageInput>
+            <TextInput source="advContent.shareText" label="Инфо для репоста" fullWidth={true}/>
         </SimpleForm>
     )
 }

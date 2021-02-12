@@ -107,7 +107,7 @@ function checkStatus() {
         console.log("UNLOGGED")
         isAuth = false;
     }
-    postRender();
+    // postRender();
     return isAuth;
 }
 
@@ -278,6 +278,7 @@ export default class Header extends Component {
     render() {
         if (!isAuth) {
             return (
+                //Гость
                 <div>
                     <header className="header guest">
                         <div className="header-hover section">
@@ -327,7 +328,7 @@ export default class Header extends Component {
                                                  onClick={authFBAction}/></a>
                                     </li>
                                 </ul>
-                                <a href="#" className="header__more">Узнать больше</a>
+                                <a href="https://linkme.club" className="header__more">Узнать больше</a>
                                 {/*<button className="hamburger hamburger-guest-js hamburger--minus" type="button">*/}
                                 {/*    <span className="hamburger-box">*/}
                                 {/*        <span className="hamburger-inner"/>*/}
@@ -339,7 +340,7 @@ export default class Header extends Component {
                 </div>
             )
         } else {
-            // = getUser();
+            // = getUser(); пользователь
             return (
                 <div>
                     <header className="header user">
@@ -366,7 +367,7 @@ export default class Header extends Component {
                                         <span className="user-hover__oror">или</span>
                                         {/*Поделись в соц. сетях*/}
                                         <p>
-                                            <button className="user-hover__copy"
+                                            <button className="user-hover__share"
                                                     onClick={() => authVKAction(this.props.title)}
                                             >
                                                 Поделись в соц. сетях
@@ -423,7 +424,7 @@ export default class Header extends Component {
                                         {/*</li>*/}
                                     </ul>
                                 </div>
-                                <a href="#" className="header__more">Узнать больше</a>
+                                <a href="https://linkme.club" className="header__more">Узнать больше</a>
                             </div>
                         </div>
                     </header>
