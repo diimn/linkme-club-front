@@ -104,7 +104,7 @@ export function postRender() {
                     man.style.top = '-' + guestSecond.scrollHeight + 'px'
                 }
                 if (window.innerWidth <= 992) {
-                    socialList.style.display = 'none'
+                    // socialList.style.display = 'none'
                     mainHeader.classList.remove('active-user')
                     // hamburgerUser.style.top = 0 + 'px'
                     // hamburgerUser.classList.remove('is-active')
@@ -130,8 +130,6 @@ export function postRender() {
         })
 
         buttonLink.addEventListener('click', processButtonlink(guestMain, menuSlideDown, menuSlideUp))
-
-
 
         if (document.querySelector('.header.guest')) {
             // hamburgerGuest.addEventListener('click', function () {

@@ -918,6 +918,8 @@ html {
 @media screen and (max-width: 415px) {
     .user .header__desc {
         max-width: 113px;
+        margin-right: 15%
+    ;
     }
 }
 
@@ -1167,7 +1169,7 @@ html {
 
 @media screen and (max-width: 576px) {
     .user .active-user .header__site-link {
-        margin-left: 110px;
+        margin-left: 20%;
         font-size: 20px;
     }
 }

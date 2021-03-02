@@ -539,7 +539,8 @@ class App extends Component {
                                     <div className="footer__colum">
                                         <ul className="footer__list">
                                             <li className="footer__item-list">
-                                                <a href="https://linkme.club" className="footer__item-link">О проекте</a>
+                                                <a href="https://linkme.club"
+                                                   className="footer__item-link" target="_blank">О проекте</a>
                                             </li>
                                             {/*<li className="footer__item-list">*/}
                                             {/*    <a href="" className="footer__item-link">Все объявления</a>*/}
@@ -555,12 +556,14 @@ class App extends Component {
                                 </div>
                                 <div className="footer__two-colums">
                                     <div className="footer__colum footer__political">
-                                        <div className="footer__socials">        <a href="https://vk.com/linkme.club" className="footer__social">
+                                        <div className="footer__socials"><a href="https://vk.com/linkme.club"
+                                                                            className="footer__social">
                                             <img src={require("./img/vk-color.png")}
                                                  alt="Иконка vk"
                                                  className="footer__social-img"/>
                                         </a>
-                                            <a href="https://www.facebook.com/groups/2637764899771970" className="footer__social">
+                                            <a href="https://www.facebook.com/groups/2637764899771970"
+                                               className="footer__social">
                                                 <img src={require("./img/landing/social-facebook.png")}
                                                      alt="Иконка fb"
                                                      className="footer__social-img"/>

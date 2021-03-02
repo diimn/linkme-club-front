@@ -17,12 +17,16 @@ app.use("/vkredirect", getWrapService())
 app.use("/fbredirect", getWrapService())
 app.use("/privacy", getWrapService())
 app.use("/:data", getWrapData())
-app.use(express.static(path.resolve(__dirname, '..', 'build')))
+app.use(defaultWay())
 
 app.listen(PORT, () => {
     console.log(`App launched on ${PORT}`);
 });
 
+function defaultWay() {
+    console.log(`Default way`)
+    return express.static(path.resolve(__dirname, '..', 'build'))
+}
 
 function getWrapService() {
     return wrap(async (req, res, next) => {
@@ -57,13 +61,14 @@ function getWrapData() {
             let result;
             try {
                 result = await axios.get(HOST + '/ogc/getByUniqUrl/' + data)
+                console.log("Res title: " + result.data.title)
+                console.log("Res urlLink: " + result.data.urlLink)
+                processMetaTags(res, result);
             } catch (e) {
-                console.log("Error occurred while getting data" ,e)
+                console.log("Error occurred while getting data", e)
+                res.redirect('https://linkme.club');
+                next();
             }
-
-            console.log("Res title: " + result.data.title)
-            console.log("Res urlLink: " + result.data.urlLink)
-            processMetaTags(res, result);
         } else {
             // processDefaultMetaTags(res)
             next();
@@ -85,14 +90,22 @@ function getWrapSubdomain() {
                     let contentUrl = HOST + '/ogc/getByUrl/' + subdomain
                     console.log('Requesting URL:', contentUrl);
                     result = await axios.get(contentUrl)
+                    console.log("Result for subdomain: " + subdomain + "\n" + result)
                     console.log("Res title: " + result.data.title)
                     console.log("Res urlLink: " + result.data.urlLink)
+                    processMetaTags(res, result);
                 } catch (e) {
-                    console.log("Error occurred while getting data" ,e)
+                    console.log("Error occurred while getting data", e)
+                    res.redirect('linkme.club')
+                    next();
+
                 }
+            } else {
+                processMetaTags(res, result);
             }
-            processMetaTags(res, result);
+
         } else {
+            next();
             // processDefaultMetaTags(res);
         }
     });

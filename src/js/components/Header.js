@@ -328,7 +328,7 @@ export default class Header extends Component {
                                                  onClick={authFBAction}/></a>
                                     </li>
                                 </ul>
-                                <a href="https://linkme.club" className="header__more">Узнать больше</a>
+                                <a href="https://linkme.club" className="header__more" target="_blank">Узнать больше</a>
                                 {/*<button className="hamburger hamburger-guest-js hamburger--minus" type="button">*/}
                                 {/*    <span className="hamburger-box">*/}
                                 {/*        <span className="hamburger-inner"/>*/}
@@ -424,7 +424,7 @@ export default class Header extends Component {
                                         {/*</li>*/}
                                     </ul>
                                 </div>
-                                <a href="https://linkme.club" className="header__more">Узнать больше</a>
+                                <a href="https://linkme.club" className="header__more" target="_blank">Узнать больше</a>
                             </div>
                         </div>
                     </header>
