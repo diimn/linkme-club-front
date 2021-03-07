@@ -144,6 +144,8 @@ function authVKAction(data) {
         window.location.replace(address)
     } else {
         //сделать репост
+        // incrementRepost(this.props.subDomain)
+        incrementRepost(localStorage.getItem('userLink'))
         console.log("VK_REPOST");
         console.log("VK_REPOST:" + data);
         let link = HOST_BASE + window.location.pathname
@@ -177,6 +179,8 @@ function authFBAction(data) {
         window.location.replace(address)
     } else {
         //сделать репост
+        // incrementRepost(this.props.subDomain)
+        incrementRepost(localStorage.getItem('userLink'))
         console.log("FB_REPOST");
         console.log("FB_REPOST:" + data);
         let link = HOST_BASE + window.location.pathname
@@ -196,6 +200,22 @@ function authFBAction(data) {
         window.open(addr)
 
     }
+
+}
+
+async function incrementRepost(uniqUrl) {
+    console.log("Incrementing repost")
+    let url = host_repost + '/incrementRepost'
+        + '?url=' + uniqUrl
+    console.log("url: " + url)
+    let res = await axios.get(url)
+    if (res.status === 200) {
+        // let userProfile = res.data;
+        console.log("SUCCESS INCREMENT")
+    } else {
+        console.log("FAIL TO INCREMENT")
+    }
+
 
 }
 
@@ -329,6 +349,7 @@ export default class Header extends Component {
                                     </li>
                                 </ul>
                                 <a href="https://linkme.club" className="header__more" target="_blank">Узнать больше</a>
+                                {/*<a onClick={() => incrementRepost(this.props.subDomain)} className="header__more" target="_blank">Узнать больше</a>*/}
                                 {/*<button className="hamburger hamburger-guest-js hamburger--minus" type="button">*/}
                                 {/*    <span className="hamburger-box">*/}
                                 {/*        <span className="hamburger-inner"/>*/}
@@ -368,7 +389,9 @@ export default class Header extends Component {
                                         {/*Поделись в соц. сетях*/}
                                         <p>
                                             <button className="user-hover__share"
-                                                    onClick={() => authVKAction(this.props.title)}
+                                                    onClick={() => currentSocialType === 'VK'
+                                                        ? authVKAction(this.props.title)
+                                                        : authFBAction(this.props.title)}
                                             >
                                                 Поделись в соц. сетях
                                             </button>
