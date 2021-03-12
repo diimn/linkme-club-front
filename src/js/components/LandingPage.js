@@ -20,6 +20,7 @@ import {withStyles} from "@material-ui/styles";
 import MuiAlert from "@material-ui/lab/Alert";
 import axios from "axios";
 import {HOST, host_clientResponse} from "../consts";
+import {YMInitializer} from "react-yandex-metrika";
 
 const styles = theme => ({
 
@@ -349,6 +350,7 @@ class LandingPage extends Component {
                     <section className="section announce">
                         <h4 className="section__title">Выбери объявления и заработай</h4>
                         <div className="announce__items">
+                            {/*Заполнять блок динамически добавить метод получения ссылки и даных на бэк*/}
                             <div className="announce__item">
                                 <div className="announce__img-wrap">
                                     <p className="announce__img-desc">Поделись ссылкой и заработай на этом
@@ -627,9 +629,7 @@ class LandingPage extends Component {
                             </IconButton>
                             <DialogContent>
                                 <DialogContentText>
-                                    Каталог в разработке.
-                                    <br/>
-                                    <a>Весь список объявлений смотрите в наших группах </a>
+                                    <a>"Смотри полный каталог всех предложений в наших сообществах в </a>
                                     <a href={"https://vk.com/linkme.club"}><u>ВК</u></a>
                                     <a> и </a>
                                     <a href={"https://www.facebook.com/groups/2637764899771970"}><u>ФБ</u></a>
@@ -735,6 +735,7 @@ class LandingPage extends Component {
                                 Спасибо! Заявка отправлена.
                             </Alert>
                         </Snackbar>
+                        <YMInitializer accounts={[73359949]} />
                     </div>
                 </footer>
 

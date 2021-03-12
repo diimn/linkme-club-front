@@ -96,7 +96,7 @@ function getWrapSubdomain() {
                     processMetaTags(res, result);
                 } catch (e) {
                     console.log("Error occurred while getting data", e)
-                    res.redirect('linkme.club')
+                    res.redirect('https://linkme.club')
                     next();
 
                 }

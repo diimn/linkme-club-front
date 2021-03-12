@@ -15,6 +15,7 @@ import PropTypes from 'prop-types';
 import {Helmet} from "react-helmet";
 
 import {YMaps, Map, Placemark, withYMaps} from "react-yandex-maps";
+import {YMInitializer} from 'react-yandex-metrika';
 import './css/plugins/swiper.css'
 import './css/plugins/jquery.fancybox.min.css'
 import './css/plugins/hamburgers.min.css'
@@ -296,7 +297,7 @@ class App extends Component {
             return (
                 <div>
                     <Helmet
-                        title="Home"
+                        title="LinkMe.club"
                         meta={[
                             {property: 'og:url', content: 'https://LinkMe.club'},
                             {property: 'og:title', content: 'LinkMe.club'},
@@ -520,7 +521,7 @@ class App extends Component {
                                 </YMaps>
                             </section>
                             : <div/>}
-
+                        <YMInitializer accounts={[73359949]} />
                         <footer className="section footer">
                             <div className="footer__wrap">
                                 <div className="footer__two-colums">
