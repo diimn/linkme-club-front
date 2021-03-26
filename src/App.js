@@ -408,8 +408,8 @@ class App extends Component {
                         <section className="section about-link">
                             <ul className="about-link__list">
                                 <li className="about-link__item">
-                                    <a href="#" onClick={this.focusToPhotosElement} className="about-link__link">Фото
-                                        объекта</a>
+                                    <a href="#" onClick={this.focusToPhotosElement}
+                                       className="about-link__link">Фото</a>
                                 </li>
                                 <li className="about-link__item">
                                     <a href="#" onClick={this.focusToDescElement}
@@ -521,7 +521,7 @@ class App extends Component {
                                 </YMaps>
                             </section>
                             : <div/>}
-                        <YMInitializer accounts={[73359949]} />
+                        <YMInitializer accounts={[73359949]}/>
                         <footer className="section footer">
                             <div className="footer__wrap">
                                 <div className="footer__two-colums">

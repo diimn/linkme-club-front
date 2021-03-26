@@ -58,20 +58,20 @@ export const AdvEdit = (props) => {
     });
 
     const val = {
-        // headPhoto: {
-        //     src: 'https://st2.depositphotos.com/1273995/7196/i/950/depositphotos_71962361-stock-photo-hands-in-shape-of-love.jpg',
-        //     title: 'Hello world!',
-        // },
-        // slider1: [
-        //     {
-        //         src: 'https://st2.depositphotos.com/1273995/7196/i/950/depositphotos_71962361-stock-photo-hands-in-shape-of-love.jpg',
-        //         title: 'Hello world!',
-        //     },
-        //     {
-        //         src: 'https://st2.depositphotos.com/1273995/7196/i/950/depositphotos_71962361-stock-photo-hands-in-shape-of-love.jpg',
-        //         title: 'Hello world!',
-        //     },
-        // ]
+        headPhoto: {
+            src: 'https://st2.depositphotos.com/1273995/7196/i/950/depositphotos_71962361-stock-photo-hands-in-shape-of-love.jpg',
+            title: 'Hello world!',
+        },
+        slider1: [
+            {
+                src: 'https://st2.depositphotos.com/1273995/7196/i/950/depositphotos_71962361-stock-photo-hands-in-shape-of-love.jpg',
+                title: 'Hello world!',
+            },
+            {
+                src: 'https://st2.depositphotos.com/1273995/7196/i/950/depositphotos_71962361-stock-photo-hands-in-shape-of-love.jpg',
+                title: 'Hello world!',
+            },
+        ]
     }
     return (
         <Edit undoable={false} title={<AdvTitle/>} {...props}>
@@ -117,6 +117,7 @@ function redactor(val) {
                         label="Загрузка изображений для шапки"
                         accept="image/*"
                         labelSingle="Перетащите фотографию или выберите для загрузки"
+                        fullWidth = {false}
             >
                 <ImageField source="src" title="title"/>
             </ImageInput>

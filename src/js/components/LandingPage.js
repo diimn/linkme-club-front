@@ -359,7 +359,6 @@ class LandingPage extends Component {
 
                                     <img src={require("../../img/landing/announce-item.png")} alt="Картинка объявления"
                                          className="announce__img"/>
-
                                 </div>
 
                                 <div className="announce__info">
@@ -735,7 +734,7 @@ class LandingPage extends Component {
                                 Спасибо! Заявка отправлена.
                             </Alert>
                         </Snackbar>
-                        <YMInitializer accounts={[73359949]} />
+                        <YMInitializer accounts={[73359949]}/>
                     </div>
                 </footer>
 
