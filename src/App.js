@@ -301,11 +301,7 @@ class App extends Component {
                         meta={[
                             {property: 'og:url', content: 'https://LinkMe.club'},
                             {property: 'og:title', content: 'LinkMe.club'},
-                            {property: 'og:description', content: "TEST_TEST"},
-                            {
-                                property: 'og:image',
-                                content: "http://static01.nyt.com/images/2015/02/19/arts/international/19iht-btnumbers19A/19iht-btnumbers19A-facebookJumbo-v2.jpg"
-                            },
+                            {property: 'og:description', content: "TEST_TEST"},8
                             // Any other meta tags go here as objects or you can just add children directly inside this component.
                         ]}/>
                     <div className="App">

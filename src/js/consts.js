@@ -20,7 +20,7 @@ export const HOST = API_PROTOCOL + WEB_URL_API + "/api/v1";
 export const host_user = HOST + "/user-profile";
 export const host_adv = HOST + "/adv";
 export const host_repost = HOST + "/repost";
-export const host_images = host_adv + "/image";
+export const host_images = HOST + "/image";
 export const host_manager = HOST + "/manager";
 export const host_clientResponse = HOST + "/clientResponse";
 

@@ -430,7 +430,7 @@ html {
 }
 
 img, audio, video {
-  width: 100%; /* for IE 11 */
+  /*width: 100%; !* for IE 11 *!*/
   max-width: 100%;
   height: auto;
 }

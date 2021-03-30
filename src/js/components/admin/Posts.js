@@ -17,7 +17,7 @@ import {
 import axios from 'axios'
 
 import BookIcon from '@material-ui/icons/Book';
-import {host_images} from "../../consts";
+import {HOST, host_adv, host_images} from "../../consts";
 
 
 export const AdvIcon = BookIcon;
@@ -34,48 +34,80 @@ export const AdvList = (props) => (
 );
 
 const AdvTitle = ({record}) => {
-    return <span>Adv {record ? `"${record.title}"` : ''}</span>;
+    console.log("record title")
+    console.log(record)
+    return <span>Adv {record ? `"${record.url}"` : ''}</span>;
 };
 
 
 export const AdvEdit = (props) => {
 
+    // let advUrl;
     // const [data, setData] = useState({ hits: [] });
-    const reqAddr = host_images + '/test'
+    const [countImages, setCountImages] = useState();
+    const [advUrl, setAdvUrl] = useState();
+
+    let photos;
+    // let countImages;
     console.log("props:")
     console.log(props)
-    const getResponse = async () => {
-        const response = await axios(reqAddr);
-            console.log("Edit axios");
-            console.log(response);
-
-    };
-    useEffect( () => {
-        getResponse();
 
 
-        // setData(result.data);
-    });
+    useEffect(() => {
+        const reqAddrUrl = host_adv + "/" + props.id
+        console.log("reqAddrUrl: " + reqAddrUrl)
+        axios.get(reqAddrUrl).then(value => {
+            console.log("request url data: ")
+            console.log(value.data)
+            setAdvUrl(value.data.url)
+            let url = value.data.url;
+            const reqAddrImages = host_images + "/getAllNumberSliderPhotos?"
+                + "url=" + url
+            console.log("reqAddrImages: " + reqAddrImages)
+            axios(reqAddrImages).then(value => {
+                console.log("Axios countImages")
+                setCountImages(value.data)
+            })
+        })
 
-    const val = {
-        headPhoto: {
-            src: 'https://st2.depositphotos.com/1273995/7196/i/950/depositphotos_71962361-stock-photo-hands-in-shape-of-love.jpg',
-            title: 'Hello world!',
-        },
-        slider1: [
-            {
-                src: 'https://st2.depositphotos.com/1273995/7196/i/950/depositphotos_71962361-stock-photo-hands-in-shape-of-love.jpg',
-                title: 'Hello world!',
+
+    }, []);
+
+    console.log("countImages");
+    console.log(countImages);
+    //получить текущий url + количество фоток на слайдере
+    if (countImages) {
+        let arrSlider1 = [];
+        for (let i = 0; i < countImages.slider1Count; i++) {
+            let addr = host_images + `/downloadSliderPhoto?url=${advUrl}&type=slider1&index=${i}`
+            arrSlider1[i] = {
+                src: addr,
+                title: 'slider1 ' + i,
+            }
+        }
+
+        let arrSlider2 = [];
+        for (let i = 0; i < countImages.slider2Count; i++) {
+            let addr = host_images + `/downloadSliderPhoto?url=${advUrl}&type=slider2&index=${i}`
+            arrSlider2[i] = {
+                src: addr,
+                title: 'slider1 ' + i,
+            }
+        }
+
+        photos = {
+            headPhoto: {
+                src: host_images + `/downloadHeaderPhoto?url=${advUrl}`,
+                title: 'headPhoto',
             },
-            {
-                src: 'https://st2.depositphotos.com/1273995/7196/i/950/depositphotos_71962361-stock-photo-hands-in-shape-of-love.jpg',
-                title: 'Hello world!',
-            },
-        ]
+            slider1: arrSlider1,
+            slider2: arrSlider2
+        }
     }
+
     return (
         <Edit undoable={false} title={<AdvTitle/>} {...props}>
-            {redactor(val)}
+            {redactor(photos)}
         </Edit>
     );
 }
@@ -96,18 +128,13 @@ export const AdvCreate = (props) => {
 }
 
 
-function redactor2(val) {
-    return (
-        <SimpleForm initialValues={val}>
-            <ImageInput source="image">
-                <ImageField source="url" title="title"/>
-            </ImageInput>
-        </SimpleForm>
-
-
-    )
-
+function getSliderImageCounts(reqAddr) {
+    return axios.get(reqAddr).then((resp) => {
+        console.log('count Images')
+        return resp.data
+    })
 }
+
 
 function redactor(val) {
 
@@ -117,9 +144,14 @@ function redactor(val) {
                         label="Загрузка изображений для шапки"
                         accept="image/*"
                         labelSingle="Перетащите фотографию или выберите для загрузки"
-                        fullWidth = {false}
+                        fullWidth={false}
             >
-                <ImageField source="src" title="title"/>
+                <ImageField source="src"
+                            title="title"
+                            className="TestNameField"
+                            classes={{label: 'my-class-name'}}
+                    // className={useImageFieldStyles}
+                />
             </ImageInput>
             <TextInput source="url" label="URL" helperText=""/>
             <TextInput source="advContent.headTop" label="Заголовок" fullWidth={true}/>
