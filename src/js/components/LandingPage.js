@@ -19,8 +19,9 @@ import PropTypes from "prop-types";
 import {withStyles} from "@material-ui/styles";
 import MuiAlert from "@material-ui/lab/Alert";
 import axios from "axios";
-import {HOST, host_clientResponse} from "../consts";
+import {GOOGLE_ANALYTIC_ACC, HOST, host_clientResponse, YA_METRICS_ACC} from "../consts";
 import {YMInitializer} from "react-yandex-metrika";
+import ReactGA from "react-ga";
 
 const styles = theme => ({
 
@@ -39,7 +40,6 @@ function Alert(props) {
 
 class LandingPage extends Component {
 
-
     state = {
         isOpenModalCatalog: false,
         isOpenModalBecomePartner: false,
@@ -50,6 +50,10 @@ class LandingPage extends Component {
         partnerPhoneError: '',
         partnerInfoValue: '',
         partnerInfoError: '',
+    }
+
+    componentDidMount() {
+        ReactGA.pageview(window.location.pathname + window.location.search);
     }
 
     handleClickOpenCatalog = () => {
@@ -76,6 +80,10 @@ class LandingPage extends Component {
 
 
     render() {
+        ReactGA.initialize(GOOGLE_ANALYTIC_ACC, {
+            debug: true
+        });
+        // ReactGA.pageview(window.location.pathname + window.location.search);
         const {classes} = this.props;
         return (
             (<body className="body">
@@ -734,7 +742,7 @@ class LandingPage extends Component {
                                 Спасибо! Заявка отправлена.
                             </Alert>
                         </Snackbar>
-                        <YMInitializer accounts={[73359949]}/>
+                        <YMInitializer accounts={[YA_METRICS_ACC]}/>
                     </div>
                 </footer>
 

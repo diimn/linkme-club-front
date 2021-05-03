@@ -26,7 +26,15 @@ import {styles1} from "./css/styles";
 import axios from 'axios'
 
 
-import {host_adv, host_clientResponse, host_images, host_repost, host_user, WEB_URL_API} from './js/consts'
+import {
+    host_adv,
+    host_clientResponse,
+    host_images,
+    host_repost,
+    host_user,
+    WEB_URL_API,
+    YA_METRICS_ACC
+} from './js/consts'
 import Header from "./js/components/Header";
 import {postRender} from "./js/main";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
@@ -34,6 +42,7 @@ import Checkbox from "@material-ui/core/Checkbox";
 import {withStyles} from "@material-ui/styles";
 import IconButton from "@material-ui/core/IconButton";
 import Snackbar from "@material-ui/core/Snackbar";
+import ReactGA from "react-ga";
 
 const styles = theme => ({
     root: {
@@ -301,7 +310,7 @@ class App extends Component {
                         meta={[
                             {property: 'og:url', content: 'https://LinkMe.club'},
                             {property: 'og:title', content: 'LinkMe.club'},
-                            {property: 'og:description', content: "TEST_TEST"},8
+                            {property: 'og:description', content: "TEST_TEST"}, 8
                             // Any other meta tags go here as objects or you can just add children directly inside this component.
                         ]}/>
                     <div className="App">
@@ -414,10 +423,15 @@ class App extends Component {
                                 <li className="about-link__item">
                                     <a href="#" onClick={this.focusToAboutElement} className="about-link__link">Инфо</a>
                                 </li>
-                                <li className="about-link__item">
-                                    <a href="#" onClick={this.focusToCoordinatesElement}
-                                       className="about-link__link">Местоположение</a>
-                                </li>
+                                {(this.state.coordinates && this.state.coordinates.length > 0)
+                                    ?
+                                    <li className="about-link__item">
+                                        <a href="#" onClick={this.focusToCoordinatesElement}
+                                           className="about-link__link">Местоположение</a>
+                                    </li>
+                                    : <div/>
+                                }
+
                                 <li className="about-link__item about-link__border">
                                     <a className="about-link__link">Заработай на этом!</a>
                                 </li>
@@ -517,7 +531,7 @@ class App extends Component {
                                 </YMaps>
                             </section>
                             : <div/>}
-                        <YMInitializer accounts={[73359949]}/>
+                        <YMInitializer accounts={[YA_METRICS_ACC]}/>
                         <footer className="section footer">
                             <div className="footer__wrap">
                                 <div className="footer__two-colums">

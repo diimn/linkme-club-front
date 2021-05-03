@@ -12,7 +12,9 @@ export const API_PROTOCOL = "https://";
 export const WEB_URL = "linkme.club";
 //todo убрать
 export const WEB_URL1 = "linkme.club";
-
+export const YA_METRICS_ACC= "75104974"
+export const GOOGLE_ANALYTIC_ACC= "UA-192905453-1"
+// export const YA_METRICS_ACC= "73359949"
 
 export const HOST_BASE = PROTOCOL + WEB_URL;
 //API

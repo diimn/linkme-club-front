@@ -13,15 +13,23 @@ import ManagerPage from "./js/components/ManagerPage";
 import AdminPage from "./js/components/admin/AdminPage";
 import FBRedirect from "./js/components/FBRedirect";
 import PrivacyPage from "./js/components/PrivacyPage";
+import ReactGA from "react-ga";
+import {GOOGLE_ANALYTIC_ACC} from "./js/consts";
 
 var hist = createBrowserHistory();
 
 const parsedData = window.location.host.split(".");
 const path = window.location.pathname.substring(1);
 console.log("parsedData: " + parsedData)
+
 const domain = parsedData[parsedData.length - 1]
 console.log(domain)
 
+ReactGA.initialize(GOOGLE_ANALYTIC_ACC, {
+    debug: true
+});
+ReactGA.pageview(window.location.pathname + window.location.search);
+// ReactGA.pageview(req.url);
 //Если есть субдомен(перешли по исходной ссылке)
 if (parsedData.length >= 3) {
     const subDomain = parsedData[0];
