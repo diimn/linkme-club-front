@@ -9,6 +9,7 @@ import {
     TextField,
     EditButton,
     TextInput,
+    BooleanInput,
     ImageInput,
     ImageField,
     useRedirect,
@@ -18,6 +19,7 @@ import axios from 'axios'
 
 import BookIcon from '@material-ui/icons/Book';
 import {HOST, host_adv, host_images} from "../../consts";
+import * as PropTypes from "prop-types";
 
 
 export const AdvIcon = BookIcon;
@@ -136,6 +138,12 @@ function getSliderImageCounts(reqAddr) {
 }
 
 
+BooleanInput.propTypes = {
+    label: PropTypes.string,
+    helperText: PropTypes.string,
+    source: PropTypes.string
+};
+
 function redactor(val) {
 
     return (
@@ -154,6 +162,7 @@ function redactor(val) {
                 />
             </ImageInput>
             <TextInput source="url" label="URL" helperText=""/>
+            <BooleanInput source="isMainPageActive" label="Появляется на заглавной" helperText=""/>
             <TextInput source="advContent.headTop" label="Заголовок" fullWidth={true}/>
             <TextInput source="advContent.price" label="Цена"/>
             <TextInput source="advContent.bonus" label="Бонус"/>

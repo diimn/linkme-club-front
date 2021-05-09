@@ -1388,6 +1388,9 @@ html {
 
 .photo-obj__img-wrap {
     height: 100%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto
 }
 
 .photo-obj__img {

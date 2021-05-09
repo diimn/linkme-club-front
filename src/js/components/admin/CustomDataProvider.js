@@ -161,6 +161,7 @@ export default (apiUrl, httpClient = fetchUtils.fetchJson) => {
 
         let data = {
             url: params.data.url,
+            isMainPageActive: params.data.isMainPageActive,
             headPhoto: headPhotoBlob,
             slider1: slider1BlobList,
             slider2: slider2BlobList,

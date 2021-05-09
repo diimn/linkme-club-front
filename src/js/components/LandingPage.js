@@ -19,7 +19,15 @@ import PropTypes from "prop-types";
 import {withStyles} from "@material-ui/styles";
 import MuiAlert from "@material-ui/lab/Alert";
 import axios from "axios";
-import {GOOGLE_ANALYTIC_ACC, HOST, host_clientResponse, YA_METRICS_ACC} from "../consts";
+import {
+    GOOGLE_ANALYTIC_ACC,
+    HOST,
+    host_adv,
+    HOST_BASE,
+    host_clientResponse,
+    host_images, PROTOCOL, WEB_URL,
+    YA_METRICS_ACC
+} from "../consts";
 import {YMInitializer} from "react-yandex-metrika";
 import ReactGA from "react-ga";
 
@@ -50,10 +58,21 @@ class LandingPage extends Component {
         partnerPhoneError: '',
         partnerInfoValue: '',
         partnerInfoError: '',
+
+        randData: []
     }
 
     componentDidMount() {
         ReactGA.pageview(window.location.pathname + window.location.search);
+        let reqAddr = host_adv + '/getRandomIds/';
+        axios.get(reqAddr).then(res => {
+            const arr = res.data
+            arr.forEach(function (item, index) {
+                console.log(item, index);
+            });
+            this.setState({randData: arr})
+            // this.setState({url: urlForState});
+        })
     }
 
     handleClickOpenCatalog = () => {
@@ -357,67 +376,7 @@ class LandingPage extends Component {
 
                     <section className="section announce">
                         <h4 className="section__title">Выбери объявления и заработай</h4>
-                        <div className="announce__items">
-                            {/*Заполнять блок динамически добавить метод получения ссылки и даных на бэк*/}
-                            <div className="announce__item">
-                                <div className="announce__img-wrap">
-                                    <p className="announce__img-desc">Поделись ссылкой и заработай на этом
-                                        <span className="announce__img-price">500 000 </span>
-                                    </p>
-
-                                    <img src={require("../../img/landing/announce-item.png")} alt="Картинка объявления"
-                                         className="announce__img"/>
-                                </div>
-
-                                <div className="announce__info">
-                                    <p className="announce__name">Продажа квартиры
-                                        в историческом районе
-                                    </p>
-
-                                    <p className="announce__desc">Концептуальный и эксклюзивный проект,
-                                        свободный от условностей. Этот дом
-                                        цепляет и внешним видом
-                                    </p>
-
-                                    <p className="announce__price">105 000 000 </p>
-
-                                    <p className="announce__price-desc">Возможна покупка в ипотеку</p>
-
-                                    <a href="#" className="announce__button link-main">Перейти к объявлению</a>
-                                </div>
-                            </div>
-
-
-                            <div className="announce__item">
-                                <div className="announce__img-wrap">
-                                    <p className="announce__img-desc">Поделись ссылкой и заработай на этом
-                                        <span className="announce__img-price">500 000 </span>
-                                    </p>
-
-                                    <img src={require("../../img/landing/announce-item.png")} alt="Картинка объявления"
-                                         className="announce__img"/>
-
-                                </div>
-
-                                <div className="announce__info">
-                                    <p className="announce__name">Продажа квартиры
-                                        в историческом районе
-                                    </p>
-
-                                    <p className="announce__desc">Концептуальный и эксклюзивный проект,
-                                        свободный от условностей. Этот дом
-                                        цепляет и внешним видом
-                                    </p>
-
-                                    <p className="announce__price">105 000 000 </p>
-
-                                    <p className="announce__price-desc">Возможна покупка в ипотеку</p>
-
-                                    <a href="#" className="announce__button link-main">Перейти к объявлению</a>
-                                </div>
-                            </div>
-
-                        </div>
+                        {randomAdv(this.state.randData)}
 
                         <a className="announce__button-more link-main" onClick={this.handleClickOpenCatalog}>Смотреть
                             больше объявлений</a>
@@ -636,7 +595,7 @@ class LandingPage extends Component {
                             </IconButton>
                             <DialogContent>
                                 <DialogContentText>
-                                    <a>"Смотри полный каталог всех предложений в наших сообществах в </a>
+                                    <a>"Смотри полный каталог всех предложений в наших сообществах <br/>в </a>
                                     <a href={"https://vk.com/linkme.club"}><u>ВК</u></a>
                                     <a> и </a>
                                     <a href={"https://www.facebook.com/groups/2637764899771970"}><u>ФБ</u></a>
@@ -824,6 +783,115 @@ class LandingPage extends Component {
         });
     }
 
+
+}
+
+function randomAdv(randData) {
+    console.log("randomAdv")
+    // let reqAddr = host_adv + '/getRandomIds/';
+    // axios.get(reqAddr).then(res => {
+    //     const arr = res.data
+    randData.forEach(function (item, index) {
+        console.log(item, index);
+    });
+    let addr = host_images + `/downloadSliderPhoto?url=test-flat&type=slider1&index=1`
+    //     this.setState({randData: arr})
+    //     // this.setState({url: urlForState});
+    // })
+    if (randData) {
+        return (
+            <div>
+                <div className="announce__items">
+                    {/*Заполнять блок динамически добавить метод получения ссылки и даных на бэк*/}
+                    {
+                        randData.map((item, key) => {
+                            return (
+                                <div key={key} className="announce__item">
+                                    <div className="announce__img-wrap">
+                                        <p className="announce__img-desc">Поделись ссылкой и заработай на этом
+                                            <span className="announce__img-price">{item.bonus}</span>
+                                        </p>
+                                        {/*<img src={addr}*/}
+                                        {/*<img src={require("../../img/landing/announce-item.png")}*/}
+                                        <img
+                                            src={host_images + `/downloadSliderPhoto?url=${item.url}&type=slider1&index=0`}
+                                            alt="Картинка объявления"
+                                            className="announce__img"/>
+                                    </div>
+                                    <div className="announce__info">
+                                        <p className="announce__name">{item.header}
+                                        </p>
+                                        <p className="announce__desc">{item.commentHeader}
+                                        </p>
+                                        <p className="announce__price">{item.price}</p>
+                                        <p className="announce__price-desc">{item.commentPrice}</p>
+                                        <a href={PROTOCOL + item.url + "." + WEB_URL}
+                                           className="announce__button link-main">Перейти
+                                            к
+                                            объявлению</a>
+                                    </div>
+                                </div>
+                            )
+                        })
+                    }
+                    {/*<div className="announce__item">*/}
+                    {/*    <div className="announce__img-wrap">*/}
+                    {/*        <p className="announce__img-desc">Поделись ссылкой и заработай на этом*/}
+                    {/*            <span className="announce__img-price">500 000 </span>*/}
+                    {/*        </p>*/}
+                    {/*        <img src={require("../../img/landing/announce-item.png")} alt="Картинка объявления"*/}
+                    {/*             className="announce__img"/>*/}
+                    {/*    </div>*/}
+                    {/*    <div className="announce__info">*/}
+                    {/*        <p className="announce__name">Продажа квартиры*/}
+                    {/*            в историческом районе*/}
+                    {/*        </p>*/}
+                    {/*        <p className="announce__desc">Концептуальный и эксклюзивный проект,*/}
+                    {/*            свободный от условностей. Этот дом*/}
+                    {/*            цепляет и внешним видом*/}
+                    {/*        </p>*/}
+                    {/*        <p className="announce__price">105 000 000 </p>*/}
+                    {/*        <p className="announce__price-desc">Возможна покупка в ипотеку</p>*/}
+                    {/*        <a href="#" className="announce__button link-main">Перейти к объявлению</a>*/}
+                    {/*    </div>*/}
+                    {/*</div>*/}
+
+                    {/*<div className="announce__item">*/}
+                    {/*    <div className="announce__img-wrap">*/}
+                    {/*        <p className="announce__img-desc">Поделись ссылкой и заработай на этом*/}
+                    {/*            <span className="announce__img-price">500 000 </span>*/}
+                    {/*        </p>*/}
+
+                    {/*        <img src={require("../../img/landing/announce-item.png")} alt="Картинка объявления"*/}
+                    {/*             className="announce__img"/>*/}
+
+                    {/*    </div>*/}
+
+                    {/*    <div className="announce__info">*/}
+                    {/*        <p className="announce__name">Продажа квартиры*/}
+                    {/*            в историческом районе*/}
+                    {/*        </p>*/}
+
+                    {/*        <p className="announce__desc">Концептуальный и эксклюзивный проект,*/}
+                    {/*            свободный от условностей. Этот дом*/}
+                    {/*            цепляет и внешним видом*/}
+                    {/*        </p>*/}
+
+                    {/*        <p className="announce__price">105 000 000 </p>*/}
+
+                    {/*        <p className="announce__price-desc">Возможна покупка в ипотеку</p>*/}
+
+                    {/*        <a href="#" className="announce__button link-main">Перейти к объявлению</a>*/}
+                    {/*    </div>*/}
+                    {/*</div>*/}
+
+                </div>
+            </div>);
+    } else {
+        return (
+            <div>""</div>
+        )
+    }
 }
 
 LandingPage.propTypes = {
