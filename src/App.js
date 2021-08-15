@@ -33,7 +33,8 @@ import {
     host_repost,
     host_user,
     WEB_URL_API,
-    YA_METRICS_ACC
+    YA_METRICS_ACC,
+    FACEBOOK_PIXEL_ACC, host_counter
 } from './js/consts'
 import Header from "./js/components/Header";
 import {postRender} from "./js/main";
@@ -43,7 +44,8 @@ import {withStyles} from "@material-ui/styles";
 import IconButton from "@material-ui/core/IconButton";
 import Snackbar from "@material-ui/core/Snackbar";
 import ReactGA from "react-ga";
-
+import {Router} from "react-router";
+// import ReactPixel from 'react-facebook-pixel';
 const styles = theme => ({
     root: {
         background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
@@ -69,6 +71,34 @@ function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 
+async function incrementBuySub(subdomain) {
+    console.log("Incrementing Buy")
+    let url = host_counter + '/incrementBuyBySubdomain'
+        + '?url=' + subdomain
+    console.log("subdomain: " + subdomain)
+    let res = await axios.get(url)
+    if (res.status === 200) {
+        // let userProfile = res.data;
+        console.log("SUCCESS INCREMENT Buy")
+    } else {
+        console.log("FAIL TO INCREMENT Buy")
+    }
+}
+
+async function incrementBuyUniq(uniq) {
+    console.log("Incrementing Buy")
+    let url = host_counter + '/incrementBuyByUniq'
+        + '?url=' + uniq
+    console.log("subdomain: " + uniq)
+    let res = await axios.get(url)
+    if (res.status === 200) {
+        // let userProfile = res.data;
+        console.log("SUCCESS INCREMENT Buy")
+    } else {
+        console.log("FAIL TO INCREMENT Buy")
+    }
+}
+
 
 function checkAdv(props) {
     let url = host_adv + '/get/' + props.subDomain
@@ -91,7 +121,7 @@ function checkAdv(props) {
 class App extends Component {
 
     state = {
-        isOpenModal: false,
+        isOpenModalBuy: false,
         isLoading: true,
         content: [],
         url: "",
@@ -153,15 +183,21 @@ class App extends Component {
         })
     }
 
-    handleClickOpen = () => {
+    handleClickOpenBuy = () => {
         console.log("OPEN ME")
-        this.setState({isOpenModal: true})
-        console.log(this.state.isOpenModal)
+        this.setState({isOpenModalBuy: true})
+        console.log(this.state.isOpenModalBuy)
+        if (this.props.subDomain) {
+            incrementBuySub(this.props.subDomain)
+        } else if (this.props.path) {
+            incrementBuyUniq(this.props.path)
+        }
+
     };
 
-    handleCancel = () => {
+    handleCancelBuy = () => {
         console.log("CANCEL ME")
-        this.setState({isOpenModal: false})
+        this.setState({isOpenModalBuy: false})
     };
 
     handleSend = () => {
@@ -193,7 +229,7 @@ class App extends Component {
                         advSourceLink: this.state.url,
                     })
                 this.setState({isClientRealtor: false});
-                this.setState({isOpenModal: false})
+                this.setState({isOpenModalBuy: false})
                 this.setState({snackOpen: true});
             } else {
                 this.setState({clientPhoneError: 'Введите полный номер телефона'})
@@ -236,7 +272,22 @@ class App extends Component {
     }
 
 
+
+
     async componentDidMount() {
+        //////////////////////////////////////////
+        import('react-facebook-pixel')
+            .then((x) => x.default)
+            .then((ReactPixel) => {
+                ReactPixel.init(FACEBOOK_PIXEL_ACC);
+                ReactPixel.pageView();
+
+                Router.events.on('routeChangeComplete', () => {
+                    ReactPixel.pageView();
+                });
+            });
+        ////////////////////////////////////////////////
+
         if (this.props.subDomain != null || this.props.path != null) {
             console.log("запрашиваем контент")
             //Проверяем тип ссылки
@@ -301,6 +352,14 @@ class App extends Component {
     render() {
         console.log("RENDER---------------")
         console.log("Coordinates: " + this.state.coordinates)
+        // const advancedMatching = { em: 'mr.pavlov.dmitry@gmail.com' };
+        // const options = {
+        //     autoConfig: true, // set pixel's autoConfig. More info: https://developers.facebook.com/docs/facebook-pixel/advanced/
+        //     debug: false, // enable logs
+        // };
+        // ReactPixel.init(FACEBOOK_PIXEL_ACC, advancedMatching, options);
+        // ReactPixel.pageView();
+
         const {classes} = this.props;
         if (this.state.isLoading === false) {
             return (
@@ -331,13 +390,11 @@ class App extends Component {
                             <h1 className="heading__title">{this.state.content.headTop}</h1>
                         </section>
                         <div>
-                            <Dialog open={this.state.isOpenModal} onClose={this.handleCancel}
+                            <Dialog open={this.state.isOpenModalBuy} onClose={this.handleCancelBuy}
                                     aria-labelledby="form-dialog-title">
-                                <DialogTitle id="form-dialog-title">Связаться с продавцом
-
-                                </DialogTitle>
+                                <DialogTitle id="form-dialog-title">Купить</DialogTitle>
                                 <IconButton aria-label="close" className={classes.closeButton}
-                                            onClick={this.handleCancel}>
+                                            onClick={this.handleCancelBuy}>
                                     <CloseIcon/>
                                 </IconButton>
                                 <DialogContent>
@@ -387,7 +444,7 @@ class App extends Component {
                                         рынка.</DialogContentText>
                                 </DialogContent>
                                 <DialogActions>
-                                    {/*<Button onClick={this.handleCancel} color="primary">*/}
+                                    {/*<Button onClick={this.handleCancelBuy} color="primary">*/}
                                     {/*    Отмена*/}
                                     {/*</Button>*/}
                                     <Button onClick={this.handleSend} color="blue" variant="outlined"
@@ -502,8 +559,8 @@ class App extends Component {
                                             <span
                                                 className="flat-desc__mortgage">{this.state.content.priceComment}</span>
                                         </p>
-                                        <a href="#" onClick={this.handleClickOpen}
-                                           className="flat-desc__btn-contact">Связаться с продавцом</a>
+                                        <a href="#" onClick={this.handleClickOpenBuy}
+                                           className="flat-desc__btn-contact">Купить</a>
                                     </div>
                                 </div>
                             </div>

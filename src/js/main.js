@@ -9,6 +9,7 @@ console.log("MAIN JS")
 export function postRender() {
 // document.addEventListener('load', function () {
     console.log("MAIN JS DOMContentLoaded")
+
     var mySwiperPhoto = new Swiper('.photo-obj-swiper', {
         loop: true,
         slidesPerView: 1,
@@ -47,6 +48,8 @@ export function postRender() {
     }
 
     if (document.querySelector('.header')) {
+        console.log("HERE!!!")
+
         let headerMain = document.querySelector('.header')
         let guestMain = document.querySelector('.main-header')
         let guestSecond = document.querySelector('.header-hover')
@@ -118,6 +121,9 @@ export function postRender() {
                 // }
             }
         }
+
+        menuSlideDown()
+        setTimeout(menuSlideUp, 3000);
 
         headerMain.addEventListener('mouseenter', function () {
             console.log("mouseenter:" + guestMain.style.top)

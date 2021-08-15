@@ -2,18 +2,20 @@
 export const PROTOCOL = "https://";
 
 //dev configuration
-// export const WEB_URL_API = "localhost:5000";
-// export const API_PROTOCOL = "http://";
-// export const WEB_URL = "linkme.clud";
+export const WEB_URL_API = "localhost:5000";
+export const API_PROTOCOL = "http://";
+export const WEB_URL = "linkme.clud";
 
 //prod configuration
-export const WEB_URL_API = "linkme.club";
-export const API_PROTOCOL = "https://";
-export const WEB_URL = "linkme.club";
+// export const WEB_URL_API = "linkme.club";
+// export const API_PROTOCOL = "https://";
+// export const WEB_URL = "linkme.club";
 //todo убрать
 export const WEB_URL1 = "linkme.club";
 export const YA_METRICS_ACC= "75104974"
 export const GOOGLE_ANALYTIC_ACC= "UA-192905453-1"
+export const FACEBOOK_PIXEL_ACC= "3857929924334795"
+
 // export const YA_METRICS_ACC= "73359949"
 
 export const HOST_BASE = PROTOCOL + WEB_URL;
@@ -25,6 +27,7 @@ export const host_repost = HOST + "/repost";
 export const host_images = HOST + "/image";
 export const host_manager = HOST + "/manager";
 export const host_clientResponse = HOST + "/clientResponse";
+export const host_counter = HOST + "/counter";
 
 export const state_param = "test";
 

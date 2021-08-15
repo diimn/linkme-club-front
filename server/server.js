@@ -9,15 +9,16 @@ import {HOST} from "../src/js/consts";
 
 const PORT = 3000;
 const app = express();
-let wrap = fn => (...args) => fn(...args).catch(args[2])
+let wrap = fn => (...args) => fn(...args).catch(args[2]);
 
 app.use("^/$", getWrapSubdomain());
-app.use("/adminPage", getWrapService())
-app.use("/vkredirect", getWrapService())
-app.use("/fbredirect", getWrapService())
-app.use("/privacy", getWrapService())
-app.use("/:data", getWrapData())
-app.use(defaultWay())
+app.use("/adminPage", getWrapService());
+app.use("/managerPage", getWrapService());
+app.use("/vkredirect", getWrapService());
+app.use("/fbredirect", getWrapService());
+app.use("/privacy", getWrapService());
+app.use("/:data", getWrapData());
+app.use(defaultWay());
 
 app.listen(PORT, () => {
     console.log(`App launched on ${PORT}`);

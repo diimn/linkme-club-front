@@ -1,5 +1,14 @@
 import React, {Component} from "react";
-import {FACEBOOK_AUTH_URL, host_user, HOST_BASE, WEB_URL, WEB_URL_API, host_repost, FACEBOOK_APP_ID} from '../consts'
+import {
+    FACEBOOK_AUTH_URL,
+    host_user,
+    HOST_BASE,
+    WEB_URL,
+    WEB_URL_API,
+    host_repost,
+    FACEBOOK_APP_ID, host_counter,
+
+} from '../consts'
 
 import {CopyToClipboard} from 'react-copy-to-clipboard';
 
@@ -12,6 +21,20 @@ import Cookies from 'universal-cookie';
 import {postRender} from "../main";
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
+import Dialog from "@material-ui/core/Dialog";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import IconButton from "@material-ui/core/IconButton";
+import CloseIcon from "@material-ui/icons/Close";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import TextField from "@material-ui/core/TextField";
+import InputMask from "react-input-mask";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Checkbox from "@material-ui/core/Checkbox";
+import DialogActions from "@material-ui/core/DialogActions";
+import Button from "@material-ui/core/Button";
+import PropTypes from "prop-types";
+import {withStyles} from "@material-ui/styles";
 
 
 // const hostUserProfile = HOST + "/user-profile";
@@ -20,6 +43,27 @@ import MuiAlert from "@material-ui/lab/Alert";
 let isAuth = false;
 let currentSocialType = '';
 const cookies = new Cookies();
+
+const styles = theme => ({
+    root: {
+        background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
+        border: 0,
+        borderRadius: 3,
+        boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
+        color: 'white',
+        height: 48,
+        padding: '0 30px',
+    },
+    closeButton: {
+        position: 'absolute',
+        right: 0,
+        // top: theme.spacing(1),
+        // color: theme.palette.grey[500],
+    },
+    clientName: {
+        marginBottom: 25,
+    },
+});
 
 async function getUser() {
     let url
@@ -215,8 +259,42 @@ async function incrementRepost(uniqUrl) {
     } else {
         console.log("FAIL TO INCREMENT")
     }
+}
 
+async function incrementLogin(subdomain, path) {
+    console.log("Incrementing Login")
+    let targetUrl;
+    if (subdomain) {
+        targetUrl = host_counter + '/incrementLoginBySubdomain'
+            + '?url=' + subdomain
+        console.log("subdomain: " + subdomain)
+    } else {
+        targetUrl = host_counter + '/incrementLoginByUniq'
+            + '?url=' + path
+        console.log("subdomain: " + path)
+    }
 
+    let res = await axios.get(targetUrl)
+    if (res.status === 200) {
+        // let userProfile = res.data;
+        console.log("SUCCESS INCREMENT Login")
+    } else {
+        console.log("FAIL TO INCREMENT Login")
+    }
+}
+
+async function incrementBuy(subdomain) {
+    console.log("Incrementing Buy")
+    let url = host_counter + '/incrementBuyBySubdomain'
+        + '?url=' + subdomain
+    console.log("subdomain: " + subdomain)
+    let res = await axios.get(url)
+    if (res.status === 200) {
+        // let userProfile = res.data;
+        console.log("SUCCESS INCREMENT Buy")
+    } else {
+        console.log("FAIL TO INCREMENT Buy")
+    }
 }
 
 function logOut() {
@@ -247,7 +325,7 @@ function Alert(props) {
 }
 
 
-export default class Header extends Component {
+class Header extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -255,10 +333,9 @@ export default class Header extends Component {
             data: [],
             userLink: [],
             snackOpen: false,
-
+            isOpenModalLogin: false
         }
     }
-
 
     async componentDidMount() {
         isAuth = checkStatus();
@@ -295,7 +372,21 @@ export default class Header extends Component {
         });
     }
 
+    handleCancelLogin = () => {
+        console.log("CANCEL ME")
+        this.setState({isOpenModalLogin: false})
+    };
+
+    handleClickOpenLogin = () => {
+        console.log("OPEN ME")
+        this.setState({isOpenModalLogin: true})
+        console.log(this.state.isOpenModalLogin)
+        incrementLogin(this.props.subDomain, this.props.path)
+        //отправить инкремент логина для субдомена(предусмотреть в рамках сессии один инкремент)
+    };
+
     render() {
+        const {classes} = this.props;
         if (!isAuth) {
             return (
                 //Гость
@@ -333,21 +424,55 @@ export default class Header extends Component {
                                     <p className="header__price">{this.props.bonus}
                                     </p><span className="header__rub">₽</span>
                                 </div>
-                                <ul className="header__social-list">
-                                    <li className="header__social-item">
-                                        <a href="#" className="header__social-link">
-                                            <img src={require("../../img/vk-color.png")} alt="Вк"
-                                                 className="header__social-img" onClick={authVKAction}
-                                            /></a>
-                                    </li>
-                                    <li className="header__social-item">
-                                        <a href="#" className="header__social-link">
-                                            <img src={require("../../img/fb-color.png")}
-                                                 alt="Фейсбук"
-                                                 className="header__social-img"
-                                                 onClick={authFBAction}/></a>
-                                    </li>
-                                </ul>
+                                {/*Список соцсетей, объединяем в модалку*/}
+                                {/*<ul className="header__social-list">*/}
+                                {/*    <li className="header__social-item">*/}
+                                {/*        <a href="#" className="header__social-link">*/}
+                                {/*            <img src={require("../../img/vk-color.png")} alt="Вк"*/}
+                                {/*                 className="header__social-img" onClick={authVKAction}*/}
+                                {/*            /></a>*/}
+                                {/*    </li>*/}
+                                {/*    <li className="header__social-item">*/}
+                                {/*        <a href="#" className="header__social-link">*/}
+                                {/*            <img src={require("../../img/fb-color.png")}*/}
+                                {/*                 alt="Фейсбук"*/}
+                                {/*                 className="header__social-img"*/}
+                                {/*                 onClick={authFBAction}/></a>*/}
+                                {/*    </li>*/}
+                                {/*</ul>*/}
+                                {/*Список соцсетей, объединяем в модалку*/}
+                                <a href="#" onClick={this.handleClickOpenLogin}
+                                   className="flat-desc__btn-login">Войти</a>
+
+                                <div>
+                                    <Dialog open={this.state.isOpenModalLogin} onClose={this.handleCancelLogin}
+                                            aria-labelledby="form-dialog-title">
+                                        <DialogTitle id="form-dialog-title">Войти</DialogTitle>
+
+                                        <IconButton aria-label="close"
+                                                    className={classes.closeButton}
+                                                    onClick={this.handleCancelLogin}>
+                                            <CloseIcon/>
+                                        </IconButton>
+
+                                        <ul className="header__social-list">
+                                            <li className="header__social-item">
+                                                <a href="#" className="header__social-link">
+                                                    <img src={require("../../img/vk-color.png")} alt="Вк"
+                                                         className="header__social-img" onClick={authVKAction}
+                                                    /></a>
+                                            </li>
+                                            <li className="header__social-item">
+                                                <a href="#" className="header__social-link">
+                                                    <img src={require("../../img/fb-color.png")}
+                                                         alt="Фейсбук"
+                                                         className="header__social-img"
+                                                         onClick={authFBAction}/></a>
+                                            </li>
+                                        </ul>
+                                    </Dialog>
+                                </div>
+                                {/**/}
                                 <a href="https://linkme.club" className="header__more" target="_blank">Узнать больше</a>
                                 {/*<a onClick={() => incrementRepost(this.props.subDomain)} className="header__more" target="_blank">Узнать больше</a>*/}
                                 {/*<button className="hamburger hamburger-guest-js hamburger--minus" type="button">*/}
@@ -457,3 +582,9 @@ export default class Header extends Component {
 
     }
 }
+
+Header.propTypes = {
+    classes: PropTypes.object.isRequired,
+};
+
+export default withStyles(styles)(Header);

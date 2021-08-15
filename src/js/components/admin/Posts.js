@@ -29,6 +29,9 @@ export const AdvList = (props) => (
         <Datagrid>
             <TextField source="id"/>
             <TextField source="url"/>
+            <TextField source="buyCounter"/>
+            <TextField source="loginCounter"/>
+            <TextField source="repostCounter"/>
             <DateField source="creatingDate"/>
             <EditButton basePath="/adv"/>
         </Datagrid>
