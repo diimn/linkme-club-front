@@ -184,7 +184,7 @@ class App extends Component {
     }
 
     handleClickOpenBuy = () => {
-        console.log("OPEN ME")
+        console.log("OPEN ME PLZ")
         this.setState({isOpenModalBuy: true})
         console.log(this.state.isOpenModalBuy)
         if (this.props.subDomain) {
